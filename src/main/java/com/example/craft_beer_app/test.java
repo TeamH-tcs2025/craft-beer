@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 public class test {
     @GetMapping("/hello")
     public String hello() {
-        return "Hello, Spring Boot!";
+        return "Hello, Spring Boot!"; 
+        // 鶴田がコメントを追加 
     }
 }
