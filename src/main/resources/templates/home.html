@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>ホーム</title></head>
+<body>
+
+<h2>こんにちは、<span th:text="${username}"></span>さん！</h2>
+
+<h3>📅 今日の天気</h3>
+<p th:text="${weather}">天気データ</p>
+
+<h3>📊 昨日の販売実績</h3>
+<p th:text="${sales}">販売実績データ</p>
+
+<hr>
+<a th:href="@{/forecast}"><button>需要予測を見る</button></a>
+<a th:href="@{/record/new}"><button>販売実績を入力する</button></a>
+<a th:href="@{/data/list}"><button>販売実績・天気を見る</button></a>
+<a th:href="@{/logout}"><button>ログアウト</button></a>
+
+</body>
+</html>
