@@ -1,7 +1,7 @@
 package com.example.craft_beer_app.service;
 
 import com.example.craft_beer_app.model.Beer;
-import com.example.craft_beer_app.repository.BeerRepository;
+import com.example.craft_beer_app.repository.BeerRepository; // 正しいインポートパス
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
