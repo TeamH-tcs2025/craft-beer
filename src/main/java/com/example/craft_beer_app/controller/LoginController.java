@@ -25,20 +25,13 @@ public class LoginController {
                         Model model) {
         if (userService.authenticate(username, password)) {
             session.setAttribute("username", username);
-            return "redirect:/welcome";
+            return "redirect:/home";
         } else {
             model.addAttribute("error", "ログイン失敗：ユーザー名またはパスワードが間違っています");
             return "login";
         }
     }
- 
-    @GetMapping("/welcome")
-    public String welcome(HttpSession session, Model model) {
-        Object user = session.getAttribute("username");
-        if (user == null) return "redirect:/login";
-        model.addAttribute("username", user);
-        return "welcome";
-    }
+
  
     @GetMapping("/logout")
     public String logout(HttpSession session) {
