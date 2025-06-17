@@ -18,7 +18,7 @@ public class Beer {
     private Integer price;
 
     @Column
-    private Integer jancode;
+    private Long jancode;
 
     @Column(name = "best_before")
     private Integer bestBefore;
@@ -68,11 +68,11 @@ public class Beer {
         this.price = price;
     }
 
-    public Integer getJancode() {
+    public Long getJancode() {
         return jancode;
     }
 
-    public void setJancode(Integer jancode) {
+    public void setJancode(Long jancode) {
         this.jancode = jancode;
     }
 
