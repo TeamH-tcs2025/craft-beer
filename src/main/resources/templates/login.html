@@ -6,7 +6,7 @@
 <form th:action="@{/login}" method="post">
 <p>ユーザー名: <input type="text" name="username"/></p>
 <p>パスワード: <input type="password" name="password"/></p>
-<p>役割: <label><input type="rabel" name="role" value="normaluser" checked> </label>
+<p>役割: <label><input type="radio" name="role" value="normaluser" checked> </label>
 <button type="submit">ログイン</button>
 </form>
 <p th:if="${error}" th:text="${error}" style="color:red;"></p>
