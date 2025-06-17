@@ -15,7 +15,7 @@
         <tr><th>担当者ID</th><td th:text="${salesRecord.createdBy}"></td></tr>
     </table>
     <a th:href="@{/sales-records/{id}/edit(id=${salesRecord.id})}" class="btn btn-warning">編集</a>
-    <a href="/sales-records/calendar" class="btn btn-info mb-3">カレンダー表示</a>
+    <a href="/sales-records" class="btn btn-secondary">カレンダーに戻る</a>
 </div>
 </body>
 </html>
