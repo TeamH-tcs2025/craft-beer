@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>販売実績詳細</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .edit-form {
+            display: none;
+            margin-top: 20px;
+        }
+        .beer-input-group {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .add-beer-btn {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>販売実績詳細 (<span th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></span>)</h1>
+            <div>
+                <a href="/sales-records" class="btn btn-secondary mr-2">戻る</a>
+                <button id="addButton" class="btn btn-success">追加</button>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(salesRecords)}" class="alert alert-info">
+            未入力
+        </div>
+
+        <div th:each="record : ${salesRecords}" class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${record.beer.name}"></h5>
+                <p class="card-text">
+                    本数: <span th:text="${record.quantity}"></span><br>
+                    担当者ID: <span th:text="${record.createdBy}"></span>
+                </p>
+                <button class="btn btn-warning mr-2 edit-record-btn" 
+                        th:data-id="${record.id}"
+                        th:data-beer-id="${record.beer.id}"
+                        th:data-quantity="${record.quantity}">編集</button>
+                <button class="btn btn-danger delete-btn" th:data-id="${record.id}">削除</button>
+            </div>
+        </div>
+
+        <div id="editForm" class="edit-form card">
+            <div class="card-body">
+                <form id="salesRecordForm">
+                    <div id="beerInputsContainer">
+                        <div class="beer-input-group">
+                            <div class="form-group">
+                                <label>ビール名</label>
+                                <select class="form-control beer-select" required>
+                                    <option value="">選択してください</option>
+                                    <option th:each="beer : ${beers}" 
+                                            th:value="${beer.id}" 
+                                            th:text="${beer.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>本数</label>
+                                <input type="number" class="form-control quantity-input" 
+                                       required min="1" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="addBeerButton" class="btn btn-outline-primary add-beer-btn mr-2">
+                        <i class="fas fa-plus"></i> ビールを追加
+                    </button>
+                    <button type="button" id="removeBeerButton" class="btn btn-outline-secondary add-beer-btn" disabled>
+                        キャンセル
+                    </button>
+
+                    <div class="form-group">
+                        <label for="createdBy">担当者ID</label>
+                        <input type="number" class="form-control" id="createdBy" 
+                               required min="1" value="1">
+                    </div>
+                    
+                    <input type="hidden" id="editRecordId">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" id="cancelButton">キャンセル</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        let isEditing = false;
+
+        document.getElementById('addButton').onclick = function() {
+            isEditing = false;
+            document.getElementById('editRecordId').value = '';
+            clearForm();
+            document.getElementById('editForm').style.display = 'block';
+        };
+
+        document.getElementById('cancelButton').onclick = function() {
+            document.getElementById('editForm').style.display = 'none';
+            clearForm();
+        };
+
+        document.getElementById('addBeerButton').onclick = function() {
+            addBeerInputGroup();
+            document.getElementById('removeBeerButton').disabled = false;
+        };
+
+        document.getElementById('removeBeerButton').onclick = function() {
+            const container = document.getElementById('beerInputsContainer');
+            const groups = container.getElementsByClassName('beer-input-group');
+            if (groups.length > 1) {
+                container.removeChild(groups[groups.length - 1]);
+            }
+            if (groups.length <= 2) {
+                this.disabled = true;
+            }
+        };
+
+        function addBeerInputGroup() {
+            const container = document.getElementById('beerInputsContainer');
+            const newGroup = document.createElement('div');
+            newGroup.className = 'beer-input-group';
+            newGroup.innerHTML = `
+                <div class="form-group">
+                    <label>ビール名</label>
+                    <select class="form-control beer-select" required>
+                        <option value="">選択してください</option>
+                        ${document.querySelector('.beer-select').innerHTML}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>本数</label>
+                    <input type="number" class="form-control quantity-input" required min="1" value="1">
+                </div>
+            `;
+            container.appendChild(newGroup);
+        }
+
+        document.querySelectorAll('.edit-record-btn').forEach(button => {
+            button.onclick = function() {
+                isEditing = true;
+                const id = this.dataset.id;
+                const beerId = this.dataset.beerId;
+                const quantity = this.dataset.quantity;
+                
+                document.getElementById('editRecordId').value = id;
+                clearForm();
+                
+                const beerSelect = document.querySelector('.beer-select');
+                beerSelect.value = beerId;
+                
+                const quantityInput = document.querySelector('.quantity-input');
+                quantityInput.value = quantity;
+                
+                document.getElementById('editForm').style.display = 'block';
+            };
+        });
+
+        document.getElementById('salesRecordForm').onsubmit = function(e) {
+            e.preventDefault();
+            const formData = [];
+            
+            document.querySelectorAll('.beer-input-group').forEach(group => {
+                formData.push({
+                    beerId: group.querySelector('.beer-select').value,
+                    quantity: parseInt(group.querySelector('.quantity-input').value)
+                });
+            });
+
+            const createdBy = document.getElementById('createdBy').value;
+            const editRecordId = document.getElementById('editRecordId').value;
+
+            const url = isEditing ? 
+                `/sales-records/api/sales-records/${editRecordId}` :
+                '/sales-records/api/sales-records';
+
+            const method = isEditing ? 'PUT' : 'POST';
+
+            Promise.all(formData.map(data => 
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: isEditing ? editRecordId : null,
+                        beerId: data.beerId,
+                        quantity: data.quantity,
+                        createdBy: parseInt(createdBy),
+                        date: '[[${date}]]'
+                    })
+                })
+            ))
+            .then(() => {
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('保存に失敗しました');
+            });
+        };
+
+        function clearForm() {
+            document.getElementById('beerInputsContainer').innerHTML = `
+                <div class="beer-input-group">
+                    <div class="form-group">
+                        <label>ビール名</label>
+                        <select class="form-control beer-select" required>
+                            <option value="">選択してください</option>
+                            ${document.querySelector('.beer-select').innerHTML}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>本数</label>
+                        <input type="number" class="form-control quantity-input" required min="1" value="1">
+                    </div>
+                </div>
+            `;
+            document.getElementById('removeBeerButton').disabled = true;
+        }
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.onclick = function() {
+                if (confirm('この記録を削除しますか？')) {
+                    fetch('/sales-records/api/sales-records/' + this.dataset.id, {
+                        method: 'DELETE'
+                    })
+                    .then(() => {
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('削除に失敗しました');
+                    });
+                }
+            };
+        });
+    </script>
+</body>
+</html>
