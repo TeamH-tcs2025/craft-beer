@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>販売実績</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container mt-4">
         <h1>販売実績</h1>
-        
+
         <a href="/sales-records/new" class="btn btn-primary mb-3">新規登録</a>
-        
+
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
@@ -33,12 +35,15 @@
                     <td th:text="${#temporals.format(record.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td>
                         <a th:href="@{/sales-records/{id}/edit(id=${record.id})}" class="btn btn-sm btn-warning">編集</a>
-                        <a th:href="@{/sales-records/{id}/delete(id=${record.id})}" class="btn btn-sm btn-danger" 
-                           onclick="return confirm('このレコードを削除してもよろしいですか？')">削除</a>
+                        <a th:href="@{/sales-records/{id}/delete(id=${record.id})}" class="btn btn-sm btn-danger"
+                            onclick="return confirm('このレコードを削除してもよろしいですか？')">削除</a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <a th:href="@{/home}"><button>ホームへ戻る</button></a>
+
 </body>
+
 </html>
