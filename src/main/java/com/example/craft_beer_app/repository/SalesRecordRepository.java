@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface SalesRecordRepository extends JpaRepository<SalesRecord, Long> {
+    List<SalesRecord> findByDate(LocalDate date);
     List<SalesRecord> findByDateBetween(LocalDate startDate, LocalDate endDate);
     List<SalesRecord> findByBeerId(Long beerId);
 }
