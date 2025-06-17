@@ -1,5 +1,9 @@
 package com.example.craft_beer_app.controller;
 
+// import com.example.craft_beer_app.model.SalesRecord;
+
+// Update the import below to match the actual location of SalesRecord, for example:
+// import com.example.craft_beer_app.entity.SalesRecord;
 import com.example.craft_beer_app.model.SalesRecord;
 import com.example.craft_beer_app.service.SalesRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
