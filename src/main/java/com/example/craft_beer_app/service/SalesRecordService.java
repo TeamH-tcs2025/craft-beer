@@ -42,4 +42,8 @@ public class SalesRecordService {
     public List<SalesRecord> getSalesRecordsByBeerId(Long beerId) {
         return salesRecordRepository.findByBeerId(beerId);
     }
+
+    public List<SalesRecord> getSalesRecordsByDate(LocalDate date) {
+        return salesRecordRepository.findByDate(date);
+    }
 }
