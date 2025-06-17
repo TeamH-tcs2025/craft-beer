@@ -4,6 +4,7 @@
 <body>
 
 <h2>こんにちは、<span th:text="${username}"></span>さん！</h2>
+<a th:href="@{/logout}">ログアウト</a>
 
 <h3>📅 今日の天気</h3>
 <p th:text="${weather}">天気データ</p>
@@ -13,9 +14,10 @@
 
 <hr>
 <a th:href="@{/forecast}"><button>需要予測を見る</button></a>
-<a th:href="@{/record/new}"><button>販売実績を入力する</button></a>
+<a th:href="@{/sales-records}"><button>販売実績を入力する</button></a>
 <a th:href="@{/data/list}"><button>販売実績・天気を見る</button></a>
 <a th:href="@{/logout}"><button>ログアウト</button></a>
 
 </body>
 </html>
+
