@@ -19,7 +19,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(HttpSession session, Model model) {
-        String user = (String) session.getAttribute("username");
+        String user = (String) session.getAttribute("email");
         if (user == null) return "redirect:/login";
 
         model.addAttribute("username", user);
