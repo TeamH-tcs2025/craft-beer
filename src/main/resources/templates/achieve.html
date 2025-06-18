@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>販売実績・天気データ</title>
+</head>
+<body>
+    <h1>販売実績・天気データ</h1>
+    <hr>
+
+    <h3>今日の日付</h3>
+    <p th:text="${today}">YYYY/MM/DD</p>
+
+    <h3>今日の天気：</h3>
+    <p th:text="${weather}">天気データ</p>
+
+    <h3>販売実績</h3>
+    <ul>
+        <li th:each="entry : ${salesresult}">
+            <span th:text="${entry.key}"></span>：<span th:text="${entry.value}"></span> 本
+        </li>
+    </ul>
+
+    <br>
+    <a th:href="@{/home}">
+        <button>ホームへ戻る</button>
+    </a>
+</body>
+</html>
