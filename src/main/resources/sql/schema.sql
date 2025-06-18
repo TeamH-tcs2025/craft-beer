@@ -1,7 +1,7 @@
 -- DROP TABLE IF EXISTS sales_records;
 -- DROP TABLE IF EXISTS beers;
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255),
@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS beers (
+CREATE TABLE beers (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price INT NOT NULL,
-    jancode BIGINT,
+    jancode BIGINT UNIQUE,
     best_before INT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
