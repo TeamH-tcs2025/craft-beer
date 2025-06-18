@@ -23,6 +23,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(HttpSession session, Model model) {
+
         String email = (String) session.getAttribute("email");
         if (email == null)
             return "redirect:/login";
@@ -31,6 +32,7 @@ public class HomeController {
         if (user == null) {
             return "redirect:/login"; // ユーザーが見つからない場合はログインページへリダイレクト
         }
+
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("weather", weatherService.getTodayWeather());
