@@ -20,8 +20,10 @@ public class SignupController {
     @PostMapping("/signup")
     public String processSignup(@RequestParam String username,
                                 @RequestParam String password,
+                                @RequestParam String email,
+                                @RequestParam String role,
                                 Model model) {
-        boolean success = userService.register(username, password);
+        boolean success = userService.register(username, password, email, role);
         if (success) {
             return "redirect:/login"; // 登録成功後はログインページへリダイレクト
         } else {
