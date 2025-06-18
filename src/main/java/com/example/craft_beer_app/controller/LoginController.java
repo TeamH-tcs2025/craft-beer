@@ -19,12 +19,12 @@ public class LoginController {
     }
  
     @PostMapping("/login")
-    public String login(@RequestParam String username,
+    public String login(@RequestParam String email,
                         @RequestParam String password,
                         HttpSession session,
                         Model model) {
-        if (userService.authenticate(username, password)) {
-            session.setAttribute("username", username);
+        if (userService.authenticate(email, password)) {
+            session.setAttribute("email", email);
             return "redirect:/home";
         } else {
             model.addAttribute("error", "ログイン失敗：ユーザー名またはパスワードが間違っています");

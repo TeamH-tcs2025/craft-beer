@@ -13,18 +13,22 @@ public class UserService {
     private UserRepository repo;
 
     // ログイン処理
-    public boolean authenticate(String username, String password) {
+    public boolean authenticate(String email, String password) {
+        User user = repo.findByEmail(email);
+        if (user == null) {
+            return false; // ユーザーが存在しない
+        }
         String hash = PasswordUtil.hash(password);
-        return repo.exists(username, hash);
+        return user.getPasswordHash().equals(hash);
     }
 
     // サインアップ処理
-    public boolean register(String username, String password) {
+    public boolean register(String username, String password, String email, String role) {
         if (repo.exists(username)) {
             return false; // 既に登録済み
         }
         String hash = PasswordUtil.hash(password);
-        repo.save(new User(username, hash));
+        repo.save(new User(username, hash, email, role));
         return true;
     }
 }
