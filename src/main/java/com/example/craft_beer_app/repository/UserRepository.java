@@ -40,4 +40,20 @@ public class UserRepository {
             return null; // ユーザーが見つからない場合はnullを返す
         }
     }
+    public User findByUsername(String username) {
+    String sql = "SELECT * FROM users WHERE username = ?";
+    try {
+        return jdbc.queryForObject(sql, (rs, rowNum) -> {
+            User user = new User();
+            user.setUsername(rs.getString("username"));
+            user.setPasswordHash(rs.getString("password_hash"));
+            user.setEmail(rs.getString("email"));
+            user.setRole(rs.getString("role"));
+            return user;
+        }, username);
+    } catch (Exception e) {
+        return null; // 見つからない場合はnull
+    }
+}
+
 }

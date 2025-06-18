@@ -31,4 +31,11 @@ public class UserService {
         repo.save(new User(username, hash, email, role));
         return true;
     }
+    public User findByEmailAndPassword(String email, String password) {
+    User user = repo.findByEmail(email);
+    if (user == null) return null;
+
+    String hash = PasswordUtil.hash(password);
+    return user.getPasswordHash().equals(hash) ? user : null;
+}
 }
