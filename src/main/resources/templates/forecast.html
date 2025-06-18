@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>需要予測表示</title>
+</head>
+
+<body>
+    <h2>需要予測</h2>
+
+    <p>今日の天気：</p><p th:text="${weather}">天気データ</p>
+
+    <h3>推奨発注数量</h3>
+    <ul>
+        <li th:each="entry : ${recommendation}">
+            <span th:text="${entry.key}"></span>：<span th:text="${entry.value}"></span> 本
+        </li>
+    </ul>
+
+    <p>次回発注までの残日数：3日（仮）</p>
+
+    <br>
+    <a th:href="@{/home}"><button>ホームへ戻る</button></a>
+</body>
+
+</html>
