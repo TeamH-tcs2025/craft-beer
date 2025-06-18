@@ -75,9 +75,6 @@
                     <button type="button" id="addBeerButton" class="btn btn-outline-primary add-beer-btn mr-2">
                         <i class="fas fa-plus"></i> ビールを追加
                     </button>
-                    <button type="button" id="removeBeerButton" class="btn btn-outline-secondary add-beer-btn" disabled>
-                        キャンセル
-                    </button>
 
                     <div class="form-group">
                         <label for="createdBy">担当者ID</label>
@@ -111,37 +108,42 @@
 
         document.getElementById('addBeerButton').onclick = function() {
             addBeerInputGroup();
-            document.getElementById('removeBeerButton').disabled = false;
-        };
-
-        document.getElementById('removeBeerButton').onclick = function() {
-            const container = document.getElementById('beerInputsContainer');
-            const groups = container.getElementsByClassName('beer-input-group');
-            if (groups.length > 1) {
-                container.removeChild(groups[groups.length - 1]);
-            }
-            if (groups.length <= 2) {
-                this.disabled = true;
-            }
         };
 
         function addBeerInputGroup() {
             const container = document.getElementById('beerInputsContainer');
             const newGroup = document.createElement('div');
             newGroup.className = 'beer-input-group';
+            
+            // ビール選択肢のHTMLを生成（「選択してください」は含めない）
+            const beerOptions = Array.from(document.querySelector('.beer-select').options)
+                .filter(option => option.value !== '') // 「選択してください」を除外
+                .map(option => `<option value="${option.value}">${option.text}</option>`)
+                .join('');
+            
             newGroup.innerHTML = `
                 <div class="form-group">
                     <label>ビール名</label>
                     <select class="form-control beer-select" required>
                         <option value="">選択してください</option>
-                        ${document.querySelector('.beer-select').innerHTML}
+                        ${beerOptions}
                     </select>
                 </div>
                 <div class="form-group">
                     <label>本数</label>
                     <input type="number" class="form-control quantity-input" required min="1" value="1">
                 </div>
+                <button type="button" class="btn btn-outline-secondary remove-group-btn">
+                    キャンセル
+                </button>
             `;
+            
+            // 削除ボタンのイベントリスナーを追加
+            const removeBtn = newGroup.querySelector('.remove-group-btn');
+            removeBtn.onclick = function() {
+                container.removeChild(newGroup);
+            };
+            
             container.appendChild(newGroup);
         }
 
@@ -170,29 +172,28 @@
             const formData = [];
             
             document.querySelectorAll('.beer-input-group').forEach(group => {
-                formData.push({
-                    beerId: group.querySelector('.beer-select').value,
-                    quantity: parseInt(group.querySelector('.quantity-input').value)
-                });
+                const beerId = group.querySelector('.beer-select').value;
+                const quantity = parseInt(group.querySelector('.quantity-input').value);
+                if (beerId && quantity) {
+                    formData.push({
+                        beerId: beerId,
+                        quantity: quantity
+                    });
+                }
             });
 
             const createdBy = document.getElementById('createdBy').value;
             const editRecordId = document.getElementById('editRecordId').value;
 
-            const url = isEditing ? 
-                `/sales-records/api/sales-records/${editRecordId}` :
-                '/sales-records/api/sales-records';
-
-            const method = isEditing ? 'PUT' : 'POST';
-
+            // 全ての入力を個別のレコードとして保存
             Promise.all(formData.map(data => 
-                fetch(url, {
-                    method: method,
+                fetch('/sales-records/api/sales-records', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        id: isEditing ? editRecordId : null,
+                        id: null,
                         beerId: data.beerId,
                         quantity: data.quantity,
                         createdBy: parseInt(createdBy),
@@ -210,13 +211,16 @@
         };
 
         function clearForm() {
+            const beerOptions = Array.from(document.querySelector('.beer-select').options)
+                .map(option => `<option value="${option.value}">${option.text}</option>`)
+                .join('');
+
             document.getElementById('beerInputsContainer').innerHTML = `
                 <div class="beer-input-group">
                     <div class="form-group">
                         <label>ビール名</label>
                         <select class="form-control beer-select" required>
-                            <option value="">選択してください</option>
-                            ${document.querySelector('.beer-select').innerHTML}
+                            ${beerOptions}
                         </select>
                     </div>
                     <div class="form-group">
@@ -225,7 +229,6 @@
                     </div>
                 </div>
             `;
-            document.getElementById('removeBeerButton').disabled = true;
         }
 
         document.querySelectorAll('.delete-btn').forEach(button => {
