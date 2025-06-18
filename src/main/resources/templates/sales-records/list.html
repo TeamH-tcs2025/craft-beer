@@ -5,87 +5,35 @@
     <title>販売実績カレンダー</title>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .fc-event { cursor: pointer; }
-        .calendar-toolbar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
     <div class="container mt-4">
         <h1>販売実績カレンダー</h1>
-        <div class="calendar-toolbar">
-            <button id="addRecordBtn" class="btn btn-success btn-sm mr-2">追加</button>
-            <button id="editRecordBtn" class="btn btn-warning btn-sm mr-2" disabled>編集</button>
-            <button id="deleteRecordBtn" class="btn btn-danger btn-sm" disabled>削除</button>
-        </div>
         <div id="calendar"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script>
-        let selectedEventId = null;
-        let selectedDate = null;
-
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/sales-records')
+            fetch('/sales-records/api/sales-records')
                 .then(response => response.json())
                 .then(data => {
                     const events = data.map(record => ({
                         id: record.id,
                         title: record.beer.name + ' x' + record.quantity,
-                        start: record.date,
-                        extendedProps: {
-                            beerName: record.beer.name,
-                            quantity: record.quantity,
-                            createdBy: record.createdBy
-                        }
+                        start: record.date
                     }));
 
                     const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
                         initialView: 'dayGridMonth',
                         locale: 'ja',
                         events: events,
-                        eventDisplay: 'block',
-                        eventClick: function(info) {
-                            selectedEventId = info.event.id;
-                            document.getElementById('editRecordBtn').disabled = false;
-                            document.getElementById('deleteRecordBtn').disabled = false;
-                        },
                         dateClick: function(info) {
-                            selectedDate = info.dateStr;
-                            document.getElementById('editRecordBtn').disabled = true;
-                            document.getElementById('deleteRecordBtn').disabled = true;
+                            window.location.href = '/sales-records/date/' + info.dateStr;
                         }
                     });
 
                     calendar.render();
-
-                    // 追加ボタン
-                    document.getElementById('addRecordBtn').onclick = function() {
-                        window.location.href = '/sales-records/new';
-                    };
-
-                    // 編集ボタン
-                    document.getElementById('editRecordBtn').onclick = function() {
-                        if (selectedEventId) {
-                            window.location.href = '/sales-records/' + selectedEventId + '/edit';
-                        }
-                    };
-
-                    // 削除ボタン
-                    document.getElementById('deleteRecordBtn').onclick = function() {
-                        if (selectedEventId && confirm('この販売実績を削除しますか？')) {
-                            fetch('/api/sales-records/' + selectedEventId, {
-                                method: 'DELETE'
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        }
-                    };
                 });
         });
     </script>
