@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.craft_beer_app.model.Weather;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class ForecastController {
 
     @GetMapping("/forecast")
     public String showForecast(Model model) {
-        String weather = weatherService.getTodayWeather();
+        Weather weather = weatherService.getTodayWeatherData();
         Map<String, Integer> recommendation = forecastService.getRecommendedOrder();
         // 天気情報とビールの推奨発注数量をモデルに追加
         model.addAttribute("weather", weather);

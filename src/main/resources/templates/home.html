@@ -6,7 +6,33 @@
 <h2>こんにちは、<span th:text="${username}"></span>さん！</h2>
 
 <h3>📅 今日の天気</h3>
-<p th:text="${weather}">天気データ</p>
+    <div class="card-body">
+        <!-- 天気データがある場合 -->
+        <div th:if="${todayWeather != null}">
+            <div class="d-flex align-items-center">
+                <!-- 降水量に応じて天気アイコンを変更 -->
+                <div class="display-4 mr-3" th:if="${todayWeather.precipitation > 0}">🌧️</div>
+                <div class="display-4 mr-3" th:if="${todayWeather.precipitation == 0}">☀️</div>
+                
+                <div>
+                    <div class="mb-2">
+                        <span class="h4 text-danger mr-2" th:text="${todayWeather.temperatureHigh + '°C'}">30°C</span>
+                        <span class="h5 text-primary" th:text="${todayWeather.temperatureLow + '°C'}">20°C</span>
+                    </div>
+                    <p class="mb-1">体感温度: <span th:text="${todayWeather.feelsLike + '°C'}">25°C</span></p>
+                    <p class="mb-1">降水量: <span th:text="${todayWeather.precipitation + ' mm'}">0 mm</span></p>
+                    <p class="mb-1">風速: <span th:text="${todayWeather.windSpeed + ' m/s'}">2 m/s</span></p>
+                    <p class="mb-0">湿度: <span th:text="${todayWeather.humidity + '%'}">60%</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 天気データがない場合 -->
+        <div th:if="${todayWeather == null}" class="text-muted">
+            <p>天気データを取得できませんでした。</p>
+            <p th:text="${weatherInfo}">晴れ（仮）</p>
+        </div>
+    </div>
 
 <h3>📊 昨日の販売実績</h3>
 <p th:text="${sales}">販売実績データ</p>
@@ -15,9 +41,11 @@
 <a th:href="@{/forecast}"><button>需要予測を見る</button></a>
 <a th:href="@{/sales-records}"><button>販売実績を入力する</button></a>
 <a th:href="@{/achieve}"><button>販売実績・天気を見る</button></a>
-<a th:href="@{/ここにアカウント管理画面のurl入れる}"><button>アカウントを管理する</button></a>
+<a th:href="@{/ad-user-management}"><button>アカウントを管理する</button></a>
+<a th:href="@{/signup}"><button>新規ユーザー登録(管理者)</button></a>
 <a th:href="@{/logout}"><button>ログアウト</button></a>
 
 </body>
 </html>
 
+<!-- 管理者 -->

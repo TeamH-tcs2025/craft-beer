@@ -13,7 +13,53 @@
     <p th:text="${today}">YYYY/MM/DD</p>
 
     <h3>今日の天気：</h3>
-    <p th:text="${weather}">天気データ</p>
+    <div class="card-body">
+        <div class="row">
+            <!-- 天気情報 -->
+            <div class="col-md-4">
+                <h6 class="border-bottom pb-2 mb-3">天気情報</h6>
+                
+                <!-- 天気データがある場合 -->
+                <div th:if="${todayWeather != null}">
+                    <!-- 降水量に応じて天気アイコンを変更 -->
+                    <div class="h3 mb-3" th:if="${todayWeather.precipitation > 0}">🌧️</div>
+                    <div class="h3 mb-3" th:if="${todayWeather.precipitation == 0}">☀️</div>
+                    
+                    <table class="table table-sm">
+                        <tr>
+                            <th>最高気温</th>
+                            <td class="text-danger" th:text="${todayWeather.temperatureHigh + '°C'}">30°C</td>
+                        </tr>
+                        <tr>
+                            <th>最低気温</th>
+                            <td class="text-primary" th:text="${todayWeather.temperatureLow + '°C'}">20°C</td>
+                        </tr>
+                        <tr>
+                            <th>体感温度</th>
+                            <td th:text="${todayWeather.feelsLike + '°C'}">25°C</td>
+                        </tr>
+                        <tr>
+                            <th>降水量</th>
+                            <td th:text="${todayWeather.precipitation + ' mm'}">0 mm</td>
+                        </tr>
+                        <tr>
+                            <th>風速</th>
+                            <td th:text="${todayWeather.windSpeed + ' m/s'}">2 m/s</td>
+                        </tr>
+                        <tr>
+                            <th>湿度</th>
+                            <td th:text="${todayWeather.humidity + '%'}">60%</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- 天気データがない場合 -->
+                <div th:if="${todayWeather == null}" class="text-muted">
+                    <p>天気データを取得できませんでした。</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h3>販売実績</h3>
     <ul>
