@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザー管理</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>ユーザー管理</h1>
+        
+        <div class="mb-3">
+            <a href="/home" class="btn btn-secondary">ホームに戻る</a>
+            <a href="/signup" class="btn btn-primary ml-2">新規ユーザー追加</a>
+        </div>
+        
+        <div th:if="${message}" class="alert alert-success" role="alert">
+            <span th:text="${message}"></span>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text="${error}"></span>
+        </div>
+        
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>ユーザー名</th>
+                    <th>メールアドレス</th>
+                    <th>権限</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email != null ? user.email : '未設定'}"></td>
+                    <td>
+                        <span th:if="${user.role}" class="badge badge-primary">管理者</span>
+                        <span th:unless="${user.role}" class="badge badge-secondary">一般ユーザー</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm delete-btn" th:data-id="${user.id}" th:data-name="${user.username}">ユーザーを削除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</body>
+</html>
