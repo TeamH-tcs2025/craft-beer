@@ -3,11 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>販売実績詳細</title>
+    <title>販売実績 登録</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .edit-form {
-            display: none;
             margin-top: 20px;
         }
 
@@ -28,11 +27,8 @@
 <body>
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>販売実績詳細 (<span th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></span>)</h1>
-            <div>
-                <a href="/sales-records" class="btn btn-secondary mr-2">戻る</a>
-                <button id="addButton" class="btn btn-success">追加</button>
-            </div>
+            <h1>販売実績一覧 (<span th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></span>)</h1>
+            <button id="addButton" class="btn btn-success">追加</button>
         </div>
 
         <div th:if="${#lists.isEmpty(salesRecords)}" class="alert alert-info">
@@ -46,13 +42,11 @@
                     本数: <span th:text="${record.quantity}"></span><br>
                     担当者ID: <span th:text="${record.createdBy}"></span>
                 </p>
-                <button class="btn btn-warning mr-2 edit-record-btn" th:data-id="${record.id}"
-                    th:data-beer-id="${record.beer.id}" th:data-quantity="${record.quantity}">編集</button>
-                <button class="btn btn-danger delete-btn" th:data-id="${record.id}">削除</button>
             </div>
         </div>
 
-        <div id="editForm" class="edit-form card">
+        <!-- 入力フォーム -->
+        <div id="editForm" class="edit-form card" style="display:none;">
             <div class="card-body">
                 <form id="salesRecordForm">
                     <div id="beerInputsContainer">
@@ -72,8 +66,8 @@
                         </div>
                     </div>
 
-                    <button type="button" id="addBeerButton" class="btn btn-outline-primary add-beer-btn mr-2">
-                        <i class="fas fa-plus"></i> ビールを追加
+                    <button type="button" id="addBeerButton" class="btn btn-outline-primary add-beer-btn">
+                        + ビールを追加
                     </button>
 
                     <div class="form-group">
@@ -81,21 +75,15 @@
                         <input type="number" class="form-control" id="createdBy" required min="1" value="1">
                     </div>
 
-                    <input type="hidden" id="editRecordId">
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="submit" class="btn btn-primary">登録</button>
                     <button type="button" class="btn btn-secondary" id="cancelButton">キャンセル</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
-        let isEditing = false;
-
         document.getElementById('addButton').onclick = function () {
-            isEditing = false;
-            document.getElementById('editRecordId').value = '';
             clearForm();
             document.getElementById('editForm').style.display = 'block';
         };
@@ -114,17 +102,43 @@
             const newGroup = document.createElement('div');
             newGroup.className = 'beer-input-group';
 
-            // ビール選択肢のHTMLを生成（「選択してください」は含めない）
             const beerOptions = Array.from(document.querySelector('.beer-select').options)
-                .filter(option => option.value !== '') // 「選択してください」を除外
+                .filter(option => option.value !== '')
                 .map(option => `<option value="${option.value}">${option.text}</option>`)
                 .join('');
 
             newGroup.innerHTML = `
+            <div class="form-group">
+                <label>ビール名</label>
+                <select class="form-control beer-select" required>
+                    <option value="">選択してください</option>
+                    ${beerOptions}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>本数</label>
+                <input type="number" class="form-control quantity-input" required min="1" value="1">
+            </div>
+            <button type="button" class="btn btn-outline-secondary remove-group-btn">キャンセル</button>
+        `;
+
+            newGroup.querySelector('.remove-group-btn').onclick = function () {
+                container.removeChild(newGroup);
+            };
+
+            container.appendChild(newGroup);
+        }
+
+        function clearForm() {
+            const beerOptions = Array.from(document.querySelector('.beer-select').options)
+                .map(option => `<option value="${option.value}">${option.text}</option>`)
+                .join('');
+
+            document.getElementById('beerInputsContainer').innerHTML = `
+            <div class="beer-input-group">
                 <div class="form-group">
                     <label>ビール名</label>
                     <select class="form-control beer-select" required>
-                        <option value="">選択してください</option>
                         ${beerOptions}
                     </select>
                 </div>
@@ -132,44 +146,14 @@
                     <label>本数</label>
                     <input type="number" class="form-control quantity-input" required min="1" value="1">
                 </div>
-                <button type="button" class="btn btn-outline-secondary remove-group-btn">
-                    キャンセル
-                </button>
-            `;
-
-            // 削除ボタンのイベントリスナーを追加
-            const removeBtn = newGroup.querySelector('.remove-group-btn');
-            removeBtn.onclick = function () {
-                container.removeChild(newGroup);
-            };
-
-            container.appendChild(newGroup);
+            </div>
+        `;
         }
-
-        document.querySelectorAll('.edit-record-btn').forEach(button => {
-            button.onclick = function () {
-                isEditing = true;
-                const id = this.dataset.id;
-                const beerId = this.dataset.beerId;
-                const quantity = this.dataset.quantity;
-
-                document.getElementById('editRecordId').value = id;
-                clearForm();
-
-                const beerSelect = document.querySelector('.beer-select');
-                beerSelect.value = beerId;
-
-                const quantityInput = document.querySelector('.quantity-input');
-                quantityInput.value = quantity;
-
-                document.getElementById('editForm').style.display = 'block';
-            };
-        });
 
         document.getElementById('salesRecordForm').onsubmit = function (e) {
             e.preventDefault();
-            const formData = [];
 
+            const formData = [];
             document.querySelectorAll('.beer-input-group').forEach(group => {
                 const beerId = group.querySelector('.beer-select').value;
                 const quantity = parseInt(group.querySelector('.quantity-input').value);
@@ -182,9 +166,7 @@
             });
 
             const createdBy = document.getElementById('createdBy').value;
-            const editRecordId = document.getElementById('editRecordId').value;
 
-            // 全ての入力を個別のレコードとして保存
             Promise.all(formData.map(data =>
                 fetch('/sales-records/api/sales-records', {
                     method: 'POST',
@@ -200,52 +182,12 @@
                     })
                 })
             ))
-                .then(() => {
-                    window.location.reload();
-                })
+                .then(() => window.location.reload())
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('保存に失敗しました');
+                    alert('登録に失敗しました');
                 });
         };
-
-        function clearForm() {
-            const beerOptions = Array.from(document.querySelector('.beer-select').options)
-                .map(option => `<option value="${option.value}">${option.text}</option>`)
-                .join('');
-
-            document.getElementById('beerInputsContainer').innerHTML = `
-                <div class="beer-input-group">
-                    <div class="form-group">
-                        <label>ビール名</label>
-                        <select class="form-control beer-select" required>
-                            ${beerOptions}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>本数</label>
-                        <input type="number" class="form-control quantity-input" required min="1" value="1">
-                    </div>
-                </div>
-            `;
-        }
-
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.onclick = function () {
-                if (confirm('この記録を削除しますか？')) {
-                    fetch('/sales-records/api/sales-records/' + this.dataset.id, {
-                        method: 'DELETE'
-                    })
-                        .then(() => {
-                            window.location.reload();
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('削除に失敗しました');
-                        });
-                }
-            };
-        });
     </script>
     <a th:href="@{/home}"><button>ホームへ戻る</button></a>
 </body>
