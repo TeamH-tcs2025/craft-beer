@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/ad-user-management")
     public String listUsers(Model model, HttpSession session) {
         // セッションからログイン情報を取得
         String email = (String) session.getAttribute("email");
@@ -39,7 +38,8 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    // ユーザー削除用エンドポイント
+    @DeleteMapping("/ad-user-management/delete/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpSession session) {
         // セッションからログイン情報を取得
