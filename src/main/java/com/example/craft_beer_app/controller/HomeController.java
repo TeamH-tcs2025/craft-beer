@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.craft_beer_app.model.Weather;
 
 @Controller
 public class HomeController {
@@ -33,11 +34,14 @@ public class HomeController {
             return "redirect:/login"; // ユーザーが見つからない場合はログインページへリダイレクト
         }
 
-
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("weather", weatherService.getTodayWeather());
         model.addAttribute("sales", salesService.getYesterdaySales());
 
+        // 天気データ
+        Weather todayWeather = weatherService.getTodayWeatherData();
+        model.addAttribute("todayWeather", todayWeather);
+        
         return "home";  //要検討
     }
+    
 }
