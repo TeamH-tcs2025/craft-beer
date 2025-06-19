@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            fetch('/admin/sales-records/api/sales-records')
+            fetch('/admin/sales-records/api/admin/sales-records')
                 // ↑修正したよ
                 .then(response => response.json())
                 .then(data => {

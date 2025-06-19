@@ -190,7 +190,7 @@
 
             // 全ての入力を個別のレコードとして保存
             Promise.all(formData.map(data =>
-                fetch('/sales-records/api/sales-records', {
+                fetch('/admin/sales-records/api/sales-records', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -237,7 +237,7 @@
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.onclick = function () {
                 if (confirm('この記録を削除しますか？')) {
-                    fetch('/sales-records/api/sales-records/' + this.dataset.id, {
+                    fetch('/admin/sales-records/api/sales-records/' + this.dataset.id, {
                         method: 'DELETE'
                     })
                         .then(() => {

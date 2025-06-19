@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/sales-records")
+@RequestMapping("/api/admin/sales-records")
 public class SalesRecordRestController {
 
     private final SalesRecordService salesRecordService;
