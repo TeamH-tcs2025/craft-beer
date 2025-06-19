@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.craft_beer_app.model.Weather;
 
 @Controller
 public class UserHomeController {
@@ -36,9 +37,12 @@ public class UserHomeController {
 
 
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("weather", weatherService.getTodayWeather());
         model.addAttribute("sales", salesService.getYesterdaySales());
-
+        
+        // 天気データ
+        Weather todayWeather = weatherService.getTodayWeatherData();
+        model.addAttribute("todayWeather", todayWeather);
+        
         return "adhome";  //要検討
     }
 }

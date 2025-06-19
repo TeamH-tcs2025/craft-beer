@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.craft_beer_app.model.Weather;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,15 +23,16 @@ public class AchieveController {
 
     @GetMapping("/achieve")
     public String showAchieve(Model model) {
-        String weather = weatherService.getTodayWeather();
         Map<String, Integer> salesresult = achieveService.getsalesresult();
 
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         model.addAttribute("today", today);
-       
-        model.addAttribute("weather", weather);
         model.addAttribute("salesresult", salesresult);
-
+        
+        // 天気データ
+        Weather todayWeather = weatherService.getTodayWeatherData();
+        model.addAttribute("todayWeather", todayWeather);
+        
         return "achieve";
     }
 }
