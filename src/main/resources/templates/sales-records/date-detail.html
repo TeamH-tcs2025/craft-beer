@@ -91,6 +91,9 @@
     </div>
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script th:inline="javascript">
+        const recordDate = [[${#temporals.format(date, 'yyyy-MM-dd')}]];
+    </script>
     <script>
         let isEditing = false;
 
@@ -197,7 +200,7 @@
                         beerId: data.beerId,
                         quantity: data.quantity,
                         createdBy: parseInt(createdBy),
-                        date: '[[${date}]]'
+                        date: recordDate
                     })
                 })
             ))
