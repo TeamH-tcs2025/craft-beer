@@ -10,9 +10,6 @@ BEGIN
     END IF;
 END $$;
 
--- Make sure to delete any previous data only if needed
--- DELETE FROM beers WHERE id IN (1, 2, 3, 4, 5, 6);
-
 -- Insert beers with explicit IDs
 INSERT INTO beers (id, name, price, jancode, best_before, is_active, created_at, updated_at) 
 VALUES (1,'ホワイトビール', 900, 4901234567894, 10, true, NOW(), NOW());

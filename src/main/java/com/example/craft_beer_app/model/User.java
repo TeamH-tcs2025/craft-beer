@@ -27,10 +27,18 @@ public class User {
     }
 
     public User(String username, String passwordHash, String email, String role) {
-        this.username = username; // ユーザー名を設定
-        this.passwordHash = passwordHash; // パスワードハッシュを設定
-        this.email = email; // メールアドレスを設定
-        this.role = role; // 役割を設定
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -64,5 +72,4 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
 }

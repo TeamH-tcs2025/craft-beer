@@ -6,6 +6,8 @@ import com.example.craft_beer_app.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -31,11 +33,23 @@ public class UserService {
         repo.save(new User(username, hash, email, role));
         return true;
     }
+    
+    // メールとパスワードでユーザーを検索
     public User findByEmailAndPassword(String email, String password) {
-    User user = repo.findByEmail(email);
-    if (user == null) return null;
+        User user = repo.findByEmail(email);
+        if (user == null) return null;
 
-    String hash = PasswordUtil.hash(password);
-    return user.getPasswordHash().equals(hash) ? user : null;
-}
+        String hash = PasswordUtil.hash(password);
+        return user.getPasswordHash().equals(hash) ? user : null;
+    }
+
+    // すべてのユーザーを取得
+    public List<User> getAllUsers() {
+        return repo.findAll();
+    }
+    
+    // ユーザーを削除
+    public void deleteUser(Long id) {
+        repo.deleteById(id);
+    }
 }
