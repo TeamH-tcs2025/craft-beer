@@ -1,4 +1,4 @@
-<!-- 管理者用 -->
+<!-- 一般ユーザー用 -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            fetch('/admin/sales-records/api/sales-records')
+            fetch('/user/sales-records/api/sales-records')
                 // ↑修正したよ
                 .then(response => response.json())
                 .then(data => {
@@ -33,7 +33,7 @@
                         locale: 'ja',
                         events: events,
                         dateClick: function (info) {
-                            window.location.href = '/admin/sales-records/date/' + info.dateStr;
+                            window.location.href = '/user/sales-records/date/' + info.dateStr;
                         }
                         // ↑修正したよ
                     });

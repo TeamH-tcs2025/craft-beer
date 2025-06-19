@@ -1,4 +1,4 @@
-// 管理者用
+// 一般ユーザー用
 
 package com.example.craft_beer_app.controller;
 
@@ -20,13 +20,13 @@ import java.util.Optional;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Controller
-@RequestMapping("/admin/sales-records")
-public class SalesRecordController {
+@RequestMapping("/user/sales-records")
+public class UserSalesRecordController {
     private final SalesRecordService salesRecordService;
     private final BeerService beerService;
 
     @Autowired
-    public SalesRecordController(SalesRecordService salesRecordService, BeerService beerService) {
+    public UserSalesRecordController(SalesRecordService salesRecordService, BeerService beerService) {
         this.salesRecordService = salesRecordService;
         this.beerService = beerService;
     }
