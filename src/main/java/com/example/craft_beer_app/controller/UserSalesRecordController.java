@@ -34,8 +34,7 @@ public class UserSalesRecordController {
     // カレンダー表示
     @GetMapping
     public String showCalendar() {
-        return "sales-records/userlist";
-        // このメソッドは、ユーザー向けの売上記録カレンダーを表示するためのものです。
+        return "sales-records/list";
     }
 
     @GetMapping("/date/{date}")
@@ -44,7 +43,7 @@ public class UserSalesRecordController {
         model.addAttribute("date", date);
         model.addAttribute("salesRecords", records);
         model.addAttribute("beers", beerService.getAllBeers());
-        return "sales-records/userdate-detail";
+        return "sales-records/date-detail";
     }
 
     @GetMapping("/api/sales-records")
