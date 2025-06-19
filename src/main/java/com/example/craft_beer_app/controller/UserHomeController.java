@@ -1,5 +1,6 @@
+
 package com.example.craft_beer_app.controller;
-//管理者
+//一般
 import com.example.craft_beer_app.service.WeatherService;
 import com.example.craft_beer_app.model.User;
 import com.example.craft_beer_app.repository.UserRepository;
@@ -11,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HomeController {
+public class UserHomeController {
     @Autowired
     private WeatherService weatherService;
 
@@ -21,7 +22,7 @@ public class HomeController {
     @Autowired
     private SalesService salesService;
 
-    @GetMapping("/admin/home")
+    @GetMapping("/user/home")
     public String home(HttpSession session, Model model) {
 
         String email = (String) session.getAttribute("email");
@@ -38,6 +39,6 @@ public class HomeController {
         model.addAttribute("weather", weatherService.getTodayWeather());
         model.addAttribute("sales", salesService.getYesterdaySales());
 
-        return "home";  //要検討
+        return "adhome";  //要検討
     }
 }

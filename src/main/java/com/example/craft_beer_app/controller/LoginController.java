@@ -45,9 +45,9 @@ public class LoginController {
         session.setAttribute("role", user.getRole());
 
         if ("false".equals(user.getRole())) {
-            return "redirect:/home";
+            return "redirect:/user/home";    //多分一般
         } else {
-            return "redirect:/home";
+            return "redirect:/admin/home";    //多分管理者
         }
     }
 }
