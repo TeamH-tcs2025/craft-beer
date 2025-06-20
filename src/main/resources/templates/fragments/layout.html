@@ -5,7 +5,7 @@
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title}">クラフトビールアプリ</title>
+    <title th:text="${title}">クラフトビール販売管理</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -19,9 +19,7 @@
 <!-- ナビゲーションバーフラグメント -->
 <nav th:fragment="nav(active)" class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="/home">
-            <i class="fas fa-beer"></i> クラフトビール
-        </a>
+        <a class="navbar-brand" href="/home">クラフトビール販売管理</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,23 +29,13 @@
                 <li class="nav-item" th:classappend="${active == 'home'} ? 'active' : ''">
                     <a class="nav-link" href="/home">ホーム</a>
                 </li>
-                <li class="nav-item" th:classappend="${active == 'forecast'} ? 'active' : ''">
-                    <a class="nav-link" href="/forecast">需要予測</a>
-                </li>
                 <li class="nav-item" th:classappend="${active == 'sales'} ? 'active' : ''">
                     <a class="nav-link" href="/sales-records">販売実績</a>
                 </li>
-                <li class="nav-item" th:classappend="${active == 'achieve'} ? 'active' : ''">
-                    <a class="nav-link" href="/achieve">販売実績・天気</a>
-                </li>
-                <li class="nav-item" th:classappend="${active == 'users'} ? 'active' : ''">
-                    <a class="nav-link" href="/admin/users">ユーザー管理</a>
-                </li>
             </ul>
-            <span class="navbar-text mr-3" th:if="${session.username}">
-                <i class="fas fa-user"></i> <span th:text="${session.username}"></span>
-            </span>
-            <a class="btn btn-outline-light btn-sm" href="/logout">ログアウト</a>
+            <form th:action="@{/logout}" method="post" class="form-inline">
+                <button class="btn btn-outline-light" type="submit">ログアウト</button>
+            </form>
         </div>
     </div>
 </nav>

@@ -48,5 +48,31 @@
             </tbody>
         </table>
     </div>    
+    
+    <script>
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.onclick = function() {
+                const userId = this.getAttribute('data-id');
+                const userName = this.getAttribute('data-name');
+                
+                if (confirm(`${userName}を削除してもよろしいですか？`)) {
+                    fetch(`/ad-user-management/delete/${userId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            throw new Error('削除に失敗しました');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('ユーザーの削除に失敗しました');
+                    });
+                }
+            };
+        });
+    </script>
 </body>
 </html>
