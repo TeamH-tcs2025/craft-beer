@@ -169,7 +169,8 @@
             const createdBy = document.getElementById('createdBy').value;
 
             Promise.all(formData.map(data =>
-                fetch('/sales-records/api/sales-records', {
+                fetch('/user/sales-records/api/user/sales-records', {
+
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

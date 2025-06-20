@@ -69,4 +69,20 @@ public class SalesRecordController {
         salesRecordService.deleteSalesRecord(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/api/admin/sales-records/{id}")
+    @ResponseBody
+    public SalesRecord updateSalesRecord(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        Optional<SalesRecord> existingRecord = salesRecordService.getSalesRecordById(id);
+        if (existingRecord.isPresent()) {
+            SalesRecord salesRecord = existingRecord.get();
+            salesRecord.setBeer(beerService.getBeerById(Long.parseLong(payload.get("beerId").toString())).orElseThrow());
+            salesRecord.setQuantity(Integer.parseInt(payload.get("quantity").toString()));
+            salesRecord.setCreatedBy(Long.parseLong(payload.get("createdBy").toString()));
+            salesRecord.setDate(LocalDate.parse(payload.get("date").toString()));
+            return salesRecordService.saveSalesRecord(salesRecord);
+        } else {
+            throw new RuntimeException("Sales record not found");
+        }
+    }
 }

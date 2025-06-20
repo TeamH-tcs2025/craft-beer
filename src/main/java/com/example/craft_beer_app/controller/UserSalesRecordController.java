@@ -52,7 +52,7 @@ public class UserSalesRecordController {
         return salesRecordService.getAllSalesRecords();
     }
 
-    @PostMapping("/api/sales-records")
+    @PostMapping("/api/user/sales-records")
     @ResponseBody
     public SalesRecord createSalesRecord(@RequestBody Map<String, Object> payload) {
         SalesRecord salesRecord = new SalesRecord();
@@ -63,7 +63,7 @@ public class UserSalesRecordController {
         return salesRecordService.saveSalesRecord(salesRecord);
     }
 
-    @DeleteMapping("/api/sales-records/{id}")
+    @DeleteMapping("/api/user/sales-records/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteSalesRecord(@PathVariable Long id) {
         salesRecordService.deleteSalesRecord(id);
