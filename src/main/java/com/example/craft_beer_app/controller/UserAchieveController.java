@@ -1,5 +1,5 @@
 package com.example.craft_beer_app.controller;
-//管理者
+//一般ユーザー
 import com.example.craft_beer_app.service.AchieveService;
 import com.example.craft_beer_app.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Controller
-public class AchieveController {
+public class UserAchieveController {
 
     @Autowired
     private AchieveService achieveService;
@@ -21,7 +21,7 @@ public class AchieveController {
     @Autowired
     private WeatherService weatherService;
 
-    @GetMapping("/admin/achieve")
+    @GetMapping("/user/achieve")
     public String showAchieve(Model model) {
         Map<String, Integer> salesresult = achieveService.getsalesresult();
 
