@@ -33,21 +33,7 @@ public class WeatherService {
         );
         return response.getBody();
     }
-
-    // /**
-    //  * 今日の天気情報（テキスト）を取得する（既存のメソッド）
-    //  */
-    // public String getTodayWeather() {
-    //     Weather todayWeather = getTodayWeatherData();
-    //     if (todayWeather != null) {
-    //         return String.format("☀️ 最高気温: %.1f°C 最低気温: %.1f°C 降水量: %.1fmm",
-    //                 todayWeather.getTemperatureHigh(),
-    //                 todayWeather.getTemperatureLow(),
-    //                 todayWeather.getPrecipitation());
-    //     }
-    //     return "天気情報が取得できませんでした。";
-    // }
-    
+   
     /**
      * 今日の天気データを取得する
      * @return 今日の天気情報を含む Weather オブジェクト
