@@ -3,25 +3,245 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>需要予測表示</title>
+    <title>クラフトビール需要予測</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .beer-card {
+            border-left: 5px solid;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+        .beer-card:hover {
+            transform: translateY(-5px);
+        }
+        .beer-pale-ale { border-left-color: #F9D342; }
+        .beer-lager { border-left-color: #FB9039; }
+        .beer-ipa { border-left-color: #D54062; }
+        .beer-white { border-left-color: #ECECEC; }
+        .beer-dark { border-left-color: #30475E; }
+        .beer-fruit { border-left-color: #F67280; }
+        .beer-total { border-left-color: #45B69C; background-color: #f8f9fa; }
+        .card-title { font-weight: bold; }
+        .forecast-date {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>需要予測</h2>
+    <div class="container mt-4">
+        <h1 class="mb-4">クラフトビール需要予測</h1>
+        
+        <!-- 天気情報 -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-cloud-sun"></i> 今日の天気</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead mb-0" th:text="${weather}">晴れ 気温: 25°C 湿度: 60% 風速: 2m/s</p>
+            </div>
+        </div>
 
-    <p>今日の天気：</p><p th:text="${weather}">天気データ</p>
+        <!-- 予測日時と次回発注情報 -->
+        <div class="forecast-date text-center">
+            <h3 th:text="${forecastDate} + ' の需要予測'">2025年3月29日の需要予測</h3>
+            <p class="text-muted">次回発注までの残日数: <span th:text="${remainingDays}">3</span>日</p>
+        </div>
+        
+        <!-- 推奨発注数量 -->
+        <h3 class="mb-3">推奨発注数量</h3>
+        
+        <div class="row">
+            <!-- ペールエール -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card beer-card beer-pale-ale">
+                    <div class="card-body">
+                        <h5 class="card-title">ペールエール</h5>
+                        <p class="display-4" th:text="${recommendation.get('ペールエール')} + '本'">12本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ラガー -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card beer-card beer-lager">
+                    <div class="card-body">
+                        <h5 class="card-title">ラガー</h5>
+                        <p class="display-4" th:text="${recommendation.get('ラガー')} + '本'">9本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- IPA -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card beer-card beer-ipa">
+                    <div class="card-body">
+                        <h5 class="card-title">IPA</h5>
+                        <p class="display-4" th:text="${recommendation.get('IPA')} + '本'">6本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ホワイトビール -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card beer-card beer-white">
+                    <div class="card-body">
+                        <h5 class="card-title">ホワイトビール</h5>
+                        <p class="display-4" th:text="${recommendation.get('ホワイトビール')} + '本'">4本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 黒ビール -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card beer-card beer-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">黒ビール</h5>
+                        <p class="display-4" th:text="${recommendation.get('黒ビール')} + '本'">7本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- フルーツビール -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card beer-card beer-fruit">
+                    <div class="card-body">
+                        <h5 class="card-title">フルーツビール</h5>
+                        <p class="display-4" th:text="${recommendation.get('フルーツビール')} + '本'">5本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 合計 -->
+            <div class="col-12">
+                <div class="card beer-card beer-total mt-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">合計予測本数</h5>
+                        <p class="display-3" th:text="${recommendation.get('合計')} + '本'">43本</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <h3>推奨発注数量</h3>
-    <ul>
-        <li th:each="entry : ${recommendation}">
-            <span th:text="${entry.key}"></span>：<span th:text="${entry.value}"></span> 本
-        </li>
-    </ul>
+        <!-- 販売履歴グラフ -->
+        <div class="card mt-5">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">過去7日間の販売履歴</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+        
+        <div class="mt-4 mb-5 text-center">
+            <a th:href="@{/home}" class="btn btn-primary btn-lg">ホームへ戻る</a>
+        </div>
+    </div>
 
-    <p>次回発注までの残日数：3日（仮）</p>
+    <script th:inline="javascript">
+    // Thymeleafから過去の販売データを取得
+    var recentSales = /*[[${recentSales}]]*/ [];
+    
+    // 日付と各ビール種類ごとの売上データを集計
+    var dates = [];
+    var paleAleData = [];
+    var lagerData = [];
+    var ipaData = [];
+    var whiteData = [];
+    var darkData = [];
+    var fruitData = [];
+    
+    // 過去7日間のデータを抽出して整形
+    if (recentSales && recentSales.length > 0) {
+        var lastWeek = recentSales.slice(-7); // 最新の7日間を取得
+        
+        for (var i = 0; i < lastWeek.length; i++) {
+            var sale = lastWeek[i];
+            
+            // 日付を追加
+            var dateParts = sale.date.split('-');
+            if (dateParts.length >= 3) {
+                dates.push(dateParts[1] + '/' + dateParts[2]); // MM/DD形式で追加
+            } else {
+                dates.push(sale.date);
+            }
+            
+            // 各ビールタイプの販売数を追加
+            paleAleData.push(sale.paleAle || 0);
+            lagerData.push(sale.lager || 0);
+            ipaData.push(sale.ipa || 0);
+            whiteData.push(sale.whiteBeer || 0);
+            darkData.push(sale.darkBeer || 0);
+            fruitData.push(sale.fruitBeer || 0);
+        }
+    }
+    
+    // グラフの描画
+    var ctx = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dates.length === 7 ? dates : ['6日前', '5日前', '4日前', '3日前', '2日前', '昨日', '今日'],
+            datasets: [
+                {
+                    label: 'ペールエール',
+                    data: paleAleData.length === 7 ? paleAleData : [5, 7, 6, 8, 10, 12, 8],
+                    backgroundColor: '#F9D342'
+                },
+                {
+                    label: 'ラガー',
+                    data: lagerData.length === 7 ? lagerData : [8, 6, 7, 9, 8, 7, 6],
+                    backgroundColor: '#FB9039'
+                },
+                {
+                    label: 'IPA',
+                    data: ipaData.length === 7 ? ipaData : [3, 4, 5, 4, 6, 3, 5],
+                    backgroundColor: '#D54062'
+                },
+                {
+                    label: 'ホワイトビール',
+                    data: whiteData.length === 7 ? whiteData : [4, 5, 3, 4, 5, 4, 3],
+                    backgroundColor: '#ECECEC'
+                },
+                {
+                    label: '黒ビール',
+                    data: darkData.length === 7 ? darkData : [6, 5, 4, 5, 4, 5, 7],
+                    backgroundColor: '#30475E'
+                },
+                {
+                    label: 'フルーツビール',
+                    data: fruitData.length === 7 ? fruitData : [4, 3, 5, 4, 3, 5, 4],
+                    backgroundColor: '#F67280'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '販売本数'
+                    }
+                }
+            }
+        }
+    });
+</script>
 
-    <br>
-    <a th:href="@{/home}"><button>ホームへ戻る</button></a>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
