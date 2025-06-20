@@ -30,7 +30,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>販売実績詳細 (<span th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></span>)</h1>
             <div>
-                <a href="/sales-records" class="btn btn-secondary mr-2">戻る</a>
+                <a href="/admin/sales-records" class="btn btn-secondary mr-2">戻る</a>
+                <!-- 管理者用画面 -->
                 <button id="addButton" class="btn btn-success">追加</button>
             </div>
         </div>
@@ -90,6 +91,9 @@
     </div>
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script th:inline="javascript">
+        const recordDate = [[${#temporals.format(date, 'yyyy-MM-dd')}]];
+    </script>
     <script>
         let isEditing = false;
 
@@ -184,22 +188,46 @@
             const createdBy = document.getElementById('createdBy').value;
             const editRecordId = document.getElementById('editRecordId').value;
 
-            // 全ての入力を個別のレコードとして保存
-            Promise.all(formData.map(data =>
-                fetch('/sales-records/api/sales-records', {
-                    method: 'POST',
+            // 編集時はPUT、新規はPOST
+            if (editRecordId) {
+                // 編集は1件のみ対応（複数編集は要件次第で調整）
+                fetch('/admin/sales-records/api/admin/sales-records/' + editRecordId, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        id: null,
-                        beerId: data.beerId,
-                        quantity: data.quantity,
+                        id: editRecordId,
+                        beerId: formData[0].beerId,
+                        quantity: formData[0].quantity,
                         createdBy: parseInt(createdBy),
-                        date: '[[${date}]]'
+                        date: recordDate
                     })
                 })
-            ))
+                .then(() => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('更新に失敗しました');
+                });
+            } else {
+                // 新規追加は複数対応
+                Promise.all(formData.map(data =>
+                    fetch('/admin/sales-records/api/admin/sales-records', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id: null,
+                            beerId: data.beerId,
+                            quantity: data.quantity,
+                            createdBy: parseInt(createdBy),
+                            date: recordDate
+                        })
+                    })
+                ))
                 .then(() => {
                     window.location.reload();
                 })
@@ -207,6 +235,7 @@
                     console.error('Error:', error);
                     alert('保存に失敗しました');
                 });
+            }
         };
 
         function clearForm() {
@@ -233,7 +262,7 @@
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.onclick = function () {
                 if (confirm('この記録を削除しますか？')) {
-                    fetch('/sales-records/api/sales-records/' + this.dataset.id, {
+                    fetch('/admin/sales-records/api/admin/sales-records/' + this.dataset.id, {
                         method: 'DELETE'
                     })
                         .then(() => {

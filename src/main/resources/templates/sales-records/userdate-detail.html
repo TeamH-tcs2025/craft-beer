@@ -30,7 +30,8 @@
             <h1>販売実績一覧 (<span th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></span>)</h1>
             <button id="addButton" class="btn btn-success">追加</button>
         </div>
-
+        <a href="/user/sales-records" class="btn btn-secondary mr-2">戻る</a>
+        <!-- 一般ユーザー用 -->
         <div th:if="${#lists.isEmpty(salesRecords)}" class="alert alert-info">
             未入力
         </div>
@@ -168,7 +169,8 @@
             const createdBy = document.getElementById('createdBy').value;
 
             Promise.all(formData.map(data =>
-                fetch('/sales-records/api/sales-records', {
+                fetch('/user/sales-records/api/user/sales-records', {
+
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

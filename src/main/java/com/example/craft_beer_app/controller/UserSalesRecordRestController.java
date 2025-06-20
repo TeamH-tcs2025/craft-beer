@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin/sales-records")
-public class SalesRecordRestController {
+@RequestMapping("/api/user/sales-records")
+public class UserSalesRecordRestController {
 
     private final SalesRecordService salesRecordService;
 
     @Autowired
-    public SalesRecordRestController(SalesRecordService salesRecordService) {
+    public UserSalesRecordRestController(SalesRecordService salesRecordService) {
         this.salesRecordService = salesRecordService;
     }
 

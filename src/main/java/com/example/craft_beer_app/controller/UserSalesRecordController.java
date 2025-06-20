@@ -1,4 +1,4 @@
-// 管理者用
+// 一般ユーザー用
 
 package com.example.craft_beer_app.controller;
 
@@ -20,13 +20,13 @@ import java.util.Optional;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Controller
-@RequestMapping("/admin/sales-records")
-public class SalesRecordController {
+@RequestMapping("/user/sales-records")
+public class UserSalesRecordController {
     private final SalesRecordService salesRecordService;
     private final BeerService beerService;
 
     @Autowired
-    public SalesRecordController(SalesRecordService salesRecordService, BeerService beerService) {
+    public UserSalesRecordController(SalesRecordService salesRecordService, BeerService beerService) {
         this.salesRecordService = salesRecordService;
         this.beerService = beerService;
     }
@@ -34,7 +34,7 @@ public class SalesRecordController {
     // カレンダー表示
     @GetMapping
     public String showCalendar() {
-        return "sales-records/list";
+        return "sales-records/userlist";
     }
 
     @GetMapping("/date/{date}")
@@ -43,16 +43,16 @@ public class SalesRecordController {
         model.addAttribute("date", date);
         model.addAttribute("salesRecords", records);
         model.addAttribute("beers", beerService.getAllBeers());
-        return "sales-records/date-detail";
+        return "sales-records/userdate-detail";
     }
 
-    @GetMapping("/api/admin/sales-records")
+    @GetMapping("/api/sales-records")
     @ResponseBody
     public List<SalesRecord> getAllSalesRecords() {
         return salesRecordService.getAllSalesRecords();
     }
 
-    @PostMapping("/api/admin/sales-records")
+    @PostMapping("/api/user/sales-records")
     @ResponseBody
     public SalesRecord createSalesRecord(@RequestBody Map<String, Object> payload) {
         SalesRecord salesRecord = new SalesRecord();
@@ -63,26 +63,10 @@ public class SalesRecordController {
         return salesRecordService.saveSalesRecord(salesRecord);
     }
 
-    @DeleteMapping("/api/admin/sales-records/{id}")
+    @DeleteMapping("/api/user/sales-records/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteSalesRecord(@PathVariable Long id) {
         salesRecordService.deleteSalesRecord(id);
         return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/api/admin/sales-records/{id}")
-    @ResponseBody
-    public SalesRecord updateSalesRecord(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
-        Optional<SalesRecord> existingRecord = salesRecordService.getSalesRecordById(id);
-        if (existingRecord.isPresent()) {
-            SalesRecord salesRecord = existingRecord.get();
-            salesRecord.setBeer(beerService.getBeerById(Long.parseLong(payload.get("beerId").toString())).orElseThrow());
-            salesRecord.setQuantity(Integer.parseInt(payload.get("quantity").toString()));
-            salesRecord.setCreatedBy(Long.parseLong(payload.get("createdBy").toString()));
-            salesRecord.setDate(LocalDate.parse(payload.get("date").toString()));
-            return salesRecordService.saveSalesRecord(salesRecord);
-        } else {
-            throw new RuntimeException("Sales record not found");
-        }
     }
 }
