@@ -2,24 +2,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <title>販売実績カレンダー</title>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+<head th:replace="fragments/layout :: head('販売実績カレンダー')"></head>
 
 <body>
+    <nav th:replace="fragments/layout :: header"></nav>
     <div class="container mt-4">
         <h1>販売実績カレンダー</h1>
         <div id="calendar"></div>
     </div>
-
-        <div class="mt-4 text-center">
-            <a th:href="@{/admin/home}" class="btn btn-info">ホームへ戻る</a>
-        </div>
-    </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script>
