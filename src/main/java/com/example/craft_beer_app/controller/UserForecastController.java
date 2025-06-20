@@ -11,7 +11,7 @@ import com.example.craft_beer_app.model.Weather;
 import java.util.Map;
 
 @Controller
-public class ForecastController {
+public class UserForecastController {
 
     @Autowired
     private ForecastService forecastService;
@@ -19,7 +19,7 @@ public class ForecastController {
     @Autowired
     private WeatherService weatherService;
 
-    @GetMapping("/admin/forecast")
+    @GetMapping("/user/forecast")
     public String showForecast(Model model) {
         Weather weather = weatherService.getTodayWeatherData();
         Map<String, Integer> recommendation = forecastService.getRecommendedOrder();
