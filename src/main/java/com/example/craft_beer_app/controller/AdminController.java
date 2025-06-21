@@ -34,7 +34,7 @@ public class AdminController {
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "ユーザー情報の取得中にエラーが発生しました: " + e.getMessage());
-            return "redirect:/home";
+            return "redirect:/admin/home";
         }
     }
 
