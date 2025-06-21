@@ -1,47 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>ホーム</title></head>
-<body>
+<head>
+    <meta charset="UTF-8">
+    <title>ホーム</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="page-container">
 
-<h2>こんにちは、<span th:text="${username}"></span>さん！</h2>
+<div class="container" style="max-width: 800px; margin-top: 40px;">
 
-<h3>📅 今日の天気</h3>
-    <div class="card-body">
-        <!-- 天気データがある場合 -->
-        <div th:if="${todayWeather != null}">
-            <div class="d-flex align-items-center">
-                <!-- 降水量に応じて天気アイコンを変更 -->
-                <div class="display-4 mr-3" th:if="${todayWeather.precipitation > 0}">🌧️</div>
-                <div class="display-4 mr-3" th:if="${todayWeather.precipitation == 0}">☀️</div>
-                
-                <div>
-                    <div class="mb-2">
-                        <span class="h4 text-danger mr-2" th:text="${todayWeather.temperatureHigh + '°C'}">30°C</span>
-                        <span class="h5 text-primary" th:text="${todayWeather.temperatureLow + '°C'}">20°C</span>
+    <div class="card p-4 mb-4">
+        <h2 class="text-center mb-3">こんにちは、<span th:text="${username}"></span>さん！</h2>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <h3 class="mb-3">📅 今日の天気</h3>
+        <div class="card-body">
+            <!-- 天気データがある場合 -->
+            <div th:if="${todayWeather != null}">
+                <div class="d-flex align-items-center">
+                    <!-- 降水量に応じて天気アイコンを変更 -->
+                    <div class="display-4 mr-3" th:if="${todayWeather.precipitation > 0}">🌧️</div>
+                    <div class="display-4 mr-3" th:if="${todayWeather.precipitation == 0}">☀️</div>
+
+                    <div>
+                        <div class="mb-2">
+                            <span class="h4 text-danger mr-2" th:text="${todayWeather.temperatureHigh + '°C'}">30°C</span>
+                            <span class="h5 text-primary" th:text="${todayWeather.temperatureLow + '°C'}">20°C</span>
+                        </div>
+                        <p class="mb-1">体感温度: <span th:text="${todayWeather.feelsLike + '°C'}">25°C</span></p>
+                        <p class="mb-1">降水量: <span th:text="${todayWeather.precipitation + ' mm'}">0 mm</span></p>
+                        <p class="mb-1">風速: <span th:text="${todayWeather.windSpeed + ' m/s'}">2 m/s</span></p>
+                        <p class="mb-0">湿度: <span th:text="${todayWeather.humidity + '%'}">60%</span></p>
                     </div>
-                    <p class="mb-1">体感温度: <span th:text="${todayWeather.feelsLike + '°C'}">25°C</span></p>
-                    <p class="mb-1">降水量: <span th:text="${todayWeather.precipitation + ' mm'}">0 mm</span></p>
-                    <p class="mb-1">風速: <span th:text="${todayWeather.windSpeed + ' m/s'}">2 m/s</span></p>
-                    <p class="mb-0">湿度: <span th:text="${todayWeather.humidity + '%'}">60%</span></p>
                 </div>
             </div>
-        </div>
-        
-        <!-- 天気データがない場合 -->
-        <div th:if="${todayWeather == null}" class="text-muted">
-            <p>天気データを取得できませんでした。</p>
-            <p th:text="${weatherInfo}">晴れ（仮）</p>
+
+            <!-- 天気データがない場合 -->
+            <div th:if="${todayWeather == null}" class="text-muted">
+                <p>天気データを取得できませんでした。</p>
+                <p th:text="${weatherInfo}">晴れ（仮）</p>
+            </div>
         </div>
     </div>
 
-<h3>📊 昨日の販売実績</h3>
-<p th:text="${sales}">販売実績データ</p>
+    <div class="card p-4 mb-4">
+        <h3 class="mb-3">📊 昨日の販売実績</h3>
+        <p th:text="${sales}">販売実績データ</p>
+    </div>
 
-<hr>
-<a th:href="@{/user/forecast}"><button>需要予測を見る</button></a>
-<a th:href="@{/user/sales-records}"><button>販売実績を入力する</button></a>
-<a th:href="@{/user/achieve}"><button>販売実績・天気を見る</button></a>
-<a th:href="@{/login}"><button>ログアウト</button></a>
+    <div class="text-center">
+        <a th:href="@{/user/forecast}"><button class="btn btn-craft mb-2 w-100">需要予測を見る</button></a>
+        <a th:href="@{/user/sales-records}"><button class="btn btn-craft mb-2 w-100">販売実績を入力する</button></a>
+        <a th:href="@{/user/achieve}"><button class="btn btn-craft mb-2 w-100">販売実績・天気を見る</button></a>
+        <a th:href="@{/login}"><button class="btn btn-secondary mb-2 w-100">ログアウト</button></a>
+    </div>
+
+</div>
 
 </body>
 </html>
