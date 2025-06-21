@@ -2,27 +2,236 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
+<head th:replace="fragments/layout :: head('クラフトビール需要予測')">
     <meta charset="UTF-8">
-    <title>需要予測表示</title>
+    <title>クラフトビール需要予測</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .beer-card {
+            border-left: 5px solid;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+        .beer-card:hover {
+            transform: translateY(-5px);
+        }
+        .beer-pale-ale { border-left-color: #F9D342; }
+        .beer-lager { border-left-color: #FB9039; }
+        .beer-ipa { border-left-color: #D54062; }
+        .beer-white { border-left-color: #ECECEC; }
+        .beer-dark { border-left-color: #30475E; }
+        .beer-fruit { border-left-color: #F67280; }
+        .beer-total { border-left-color: #45B69C; background-color: #f8f9fa; }
+        .card-title { font-weight: bold; }
+        .forecast-date {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .order-day-badge {
+            font-size: 1rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>需要予測</h2>
+    <!-- ナビゲーションバーを追加 -->
+    <nav th:replace="fragments/layout :: nav('forecast')"></nav>
 
-    <p>今日の天気：</p><p th:text="${weather}">天気データ</p>
+    <div class="container mt-4">
+        <h1 class="mb-4">
+            クラフトビール需要予測
+            <span th:if="${isOrderDay}" class="badge badge-danger order-day-badge">本日は発注日です</span>
+        </h1>
+        
+        <!-- エラー表示 -->
+        <div class="alert alert-danger" th:if="${error != null}" th:text="${error}">
+            エラーが発生しました
+        </div>
+        
+        <!-- 今日の日付 -->
+        <div class="alert alert-info">
+            <strong>今日の日付:</strong> <span th:text="${today}">2025年6月20日(金)</span>
+        </div>
+        
+        <!-- 天気情報 -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-cloud-sun"></i> 今日の気象条件</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead mb-0" th:text="${weather}">気温: 25.0°C 湿度: 60% 風速: 2.0m/s</p>
+            </div>
+        </div>
 
-    <h3>推奨発注数量</h3>
-    <ul>
-        <li th:each="entry : ${recommendation}">
-            <span th:text="${entry.key}"></span>：<span th:text="${entry.value}"></span> 本
-        </li>
-    </ul>
+        <!-- 推奨発注数量 -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-shopping-cart"></i> 
+                    <span th:text="${startDate} + '～' + ${endDate}">6/21～6/24</span>の需要予測に基づく推奨発注数量
+                    <small class="text-white-50 ml-2">(日曜定休日)</small>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- ペールエール -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card beer-card beer-pale-ale">
+                            <div class="card-body">
+                                <h5 class="card-title">ペールエール</h5>
+                                <p class="display-4" th:text="${orderQuantity.get('ペールエール')} + '本'">12本</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ラガー -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card beer-card beer-lager">
+                            <div class="card-body">
+                                <h5 class="card-title">ラガー</h5>
+                                <p class="display-4" th:text="${orderQuantity.get('ラガー')} + '本'">9本</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- IPA -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card beer-card beer-ipa">
+                            <div class="card-body">
+                                <h5 class="card-title">IPA</h5>
+                                <p class="display-4" th:text="${orderQuantity.get('IPA')} + '本'">6本</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ホワイトビール -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card beer-card beer-white">
+                            <div class="card-body">
+                                <h5 class="card-title">ホワイトビール</h5>
+                                <p class="display-4" th:text="${orderQuantity.get('ホワイトビール')} + '本'">4本</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 黒ビール -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card beer-card beer-dark">
+                            <div class="card-body">
+                                <h5 class="card-title">黒ビール</h5>
+                                <p class="display-4" th:text="${orderQuantity.get('黒ビール')} + '本'">7本</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- フルーツビール -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card beer-card beer-fruit">
+                            <div class="card-body">
+                                <h5 class="card-title">フルーツビール</h5>
+                                <p class="display-4" th:text="${orderQuantity.get('フルーツビール')} + '本'">5本</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 合計 -->
+                    <div class="col-12">
+                        <div class="card beer-card beer-total mt-3">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">合計推奨発注数量</h5>
+                                <p class="display-3" th:text="${orderQuantity.get('合計')} + '本'">43本</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 注意書き -->
+                <div class="alert alert-warning mt-3">
+                    <h5><i class="fas fa-exclamation-triangle"></i> 注意事項</h5>
+                    <ul>
+                        <li>上記の発注数量は過去の販売データと天気予報に基づいて算出されています</li>
+                        <li>イベントやキャンペーンがある場合は適宜調整してください</li>
+                        <li>賞味期限は最大15日間です。余剰在庫に注意してください</li>
+                        <li>日曜日は定休日のため、発注数量計算から除外しています</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-    <p>次回発注までの残日数：3日（仮）</p>
+        <!-- 明日の需要予測（詳細） -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-line"></i> 明日の需要予測（詳細）</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ビール種類</th>
+                                <th>予測販売数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ペールエール</td>
+                                <td th:text="${dailyForecast.get('ペールエール')} + '本'">12本</td>
+                            </tr>
+                            <tr>
+                                <td>ラガー</td>
+                                <td th:text="${dailyForecast.get('ラガー')} + '本'">9本</td>
+                            </tr>
+                            <tr>
+                                <td>IPA</td>
+                                <td th:text="${dailyForecast.get('IPA')} + '本'">6本</td>
+                            </tr>
+                            <tr>
+                                <td>ホワイトビール</td>
+                                <td th:text="${dailyForecast.get('ホワイトビール')} + '本'">4本</td>
+                            </tr>
+                            <tr>
+                                <td>黒ビール</td>
+                                <td th:text="${dailyForecast.get('黒ビール')} + '本'">7本</td>
+                            </tr>
+                            <tr>
+                                <td>フルーツビール</td>
+                                <td th:text="${dailyForecast.get('フルーツビール')} + '本'">5本</td>
+                            </tr>
+                            <tr class="table-active font-weight-bold">
+                                <td>合計</td>
+                                <td th:text="${dailyForecast.get('合計')} + '本'">43本</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 予測対象日の表示 -->
+                <div class="mt-3">
+                    <h6>予測対象日:</h6>
+                    <span class="badge badge-info mr-2" th:each="date : ${forecastDates}" th:text="${date}">6/21(土)</span>
+                    <span class="badge badge-light">(※日曜は定休日のため除外)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4 mb-5 text-center">
+            <a th:href="@{/user/home}" class="btn btn-primary btn-lg">
+                <i class="fas fa-home"></i> ホームへ戻る
+            </a>
+        </div>
+    </div>
 
-    <br>
-    <a th:href="@{/user/home}"><button>ホームへ戻る</button></a>
+    <!-- フッターを追加 -->
+    <footer th:replace="fragments/layout :: footer"></footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
