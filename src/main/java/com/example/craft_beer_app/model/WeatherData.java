@@ -1,65 +1,64 @@
 package com.example.craft_beer_app.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * 予測API用の天気データクラス
+ */
 public class WeatherData {
-    @JsonProperty("最高気温(℃)")
-    private double maxTemperature;
+    private double temp; // 気温（℃）
+    private double humidity; // 湿度（％）
+    private double precipitation; // 降水量（mm）
+    private double wind_speed; // 風速（m/s）
     
-    @JsonProperty("平均湿度(％)")
-    private double avgHumidity;
-    
-    @JsonProperty("降水量の合計(mm)")
-    private double totalRainfall;
-    
-    @JsonProperty("最大風速(m/s)")
-    private double maxWindSpeed;
-
     public WeatherData() {
     }
-
-    public WeatherData(double maxTemperature, double avgHumidity, double totalRainfall, double maxWindSpeed) {
-        this.maxTemperature = maxTemperature;
-        this.avgHumidity = avgHumidity;
-        this.totalRainfall = totalRainfall;
-        this.maxWindSpeed = maxWindSpeed;
+    
+    public WeatherData(double temp, double humidity, double precipitation, double windSpeed) {
+        this.temp = temp;
+        this.humidity = humidity;
+        this.precipitation = precipitation;
+        this.wind_speed = windSpeed;
     }
-
-    public double getMaxTemperature() {
-        return maxTemperature;
+    
+    // 追加：ゲッターメソッド
+    public double getTemp() {
+        return temp;
     }
-
-    public void setMaxTemperature(double maxTemperature) {
-        this.maxTemperature = maxTemperature;
+    
+    public void setTemp(double temp) {
+        this.temp = temp;
     }
-
-    public double getAvgHumidity() {
-        return avgHumidity;
+    
+    public double getHumidity() {
+        return humidity;
     }
-
-    public void setAvgHumidity(double avgHumidity) {
-        this.avgHumidity = avgHumidity;
+    
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
     }
-
-    public double getTotalRainfall() {
-        return totalRainfall;
+    
+    public double getPrecipitation() {
+        return precipitation;
     }
-
-    public void setTotalRainfall(double totalRainfall) {
-        this.totalRainfall = totalRainfall;
+    
+    public void setPrecipitation(double precipitation) {
+        this.precipitation = precipitation;
     }
-
-    public double getMaxWindSpeed() {
-        return maxWindSpeed;
+    
+    public double getWind_speed() {
+        return wind_speed;
     }
-
-    public void setMaxWindSpeed(double maxWindSpeed) {
-        this.maxWindSpeed = maxWindSpeed;
+    
+    public void setWind_speed(double windSpeed) {
+        this.wind_speed = windSpeed;
     }
-
+    
     @Override
     public String toString() {
-        return String.format("最高気温: %.1f℃, 平均湿度: %.1f%%, 降水量: %.1fmm, 最大風速: %.1fm/s", 
-                maxTemperature, avgHumidity, totalRainfall, maxWindSpeed);
+        return "WeatherData{" +
+                "temp=" + temp +
+                ", humidity=" + humidity +
+                ", precipitation=" + precipitation +
+                ", wind_speed=" + wind_speed +
+                '}';
     }
 }

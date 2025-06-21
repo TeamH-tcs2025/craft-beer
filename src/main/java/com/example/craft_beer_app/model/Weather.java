@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Weather {
     private String date;
     
+    private String weather; 
+    
     @JsonProperty("temperature_high")
     private Double temperatureHigh;
     
@@ -32,6 +34,21 @@ public class Weather {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    
+    // 追加: 天気状態を取得するメソッド
+    public String getWeather() {
+        return weather;
+    }
+    
+    // 追加: 天気状態を設定するメソッド
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+    
+    // 追加: 気温を取得するメソッド（temperatureHighを返す）
+    public Double getTemperature() {
+        return temperatureHigh;
     }
 
     public Double getTemperatureHigh() {
@@ -86,6 +103,7 @@ public class Weather {
     public String toString() {
         return "Weather{" +
                 "date='" + date + '\'' +
+                ", weather='" + weather + '\'' +
                 ", temperatureHigh=" + temperatureHigh +
                 ", temperatureLow=" + temperatureLow +
                 ", feelsLike=" + feelsLike +

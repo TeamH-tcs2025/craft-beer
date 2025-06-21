@@ -1,41 +1,43 @@
 package com.example.craft_beer_app.model;
+
 import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ForecastRequest {
     private String date;
-    private WeatherData weather;
-    private List<DailySales> recent_sales;
-
+    
+    @JsonProperty("weather")
+    private Map<String, Double> weather;
+    
+    @JsonProperty("recent_sales")
+    private List<Map<String, Object>> recentSales;
+    
     public ForecastRequest() {
     }
-
-    public ForecastRequest(String date, WeatherData weather, List<DailySales> recent_sales) {
-        this.date = date;
-        this.weather = weather;
-        this.recent_sales = recent_sales;
-    }
-
+    
     public String getDate() {
         return date;
     }
-
+    
     public void setDate(String date) {
         this.date = date;
     }
-
-    public WeatherData getWeather() {
+    
+    public Map<String, Double> getWeather() {
         return weather;
     }
-
-    public void setWeather(WeatherData weather) {
+    
+    public void setWeather(Map<String, Double> weather) {
         this.weather = weather;
     }
-
-    public List<DailySales> getRecent_sales() {
-        return recent_sales;
+    
+    public List<Map<String, Object>> getRecentSales() {
+        return recentSales;
     }
-
-    public void setRecent_sales(List<DailySales> recent_sales) {
-        this.recent_sales = recent_sales;
+    
+    public void setRecentSales(List<Map<String, Object>> recentSales) {
+        this.recentSales = recentSales;
     }
 }

@@ -2,30 +2,30 @@ package com.example.craft_beer_app.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DailySales {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private String date;
-
+    
+    private String date; // 日付はString形式に統一
+    
     @JsonProperty("ペールエール(本)")
     private Integer paleAle;
-
+    
     @JsonProperty("ラガー(本)")
     private Integer lager;
-
+    
     @JsonProperty("IPA(本)")
     private Integer ipa;
-
+    
     @JsonProperty("ホワイトビール(本)")
     private Integer whiteBeer;
-
+    
     @JsonProperty("黒ビール(本)")
     private Integer darkBeer;
-
+    
     @JsonProperty("フルーツビール(本)")
     private Integer fruitBeer;
 
@@ -56,6 +56,11 @@ public class DailySales {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    
+    // LocalDateに変換するメソッドを追加
+    public LocalDate getDateAsLocalDate() {
+        return LocalDate.parse(date);
     }
 
     public Integer getPaleAle() {
@@ -105,7 +110,7 @@ public class DailySales {
     public void setFruitBeer(Integer fruitBeer) {
         this.fruitBeer = fruitBeer;
     }
-
+    
     // Thymeleaf用にビールタイプをキー、本数を値としたMapを返すメソッド
     public Map<String, Integer> getBeerSales() {
         Map<String, Integer> salesMap = new HashMap<>();

@@ -14,6 +14,10 @@ public class Beer {
     @Column(nullable = false, length = 100)
     private String name;
 
+    // 追加: ビールのタイプ
+    @Column(length = 50)
+    private String type;
+
     @Column(nullable = false)
     private Integer price;
 
@@ -58,6 +62,15 @@ public class Beer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    // 追加: タイプのgetter/setter
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Integer getPrice() {
