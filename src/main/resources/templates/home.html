@@ -79,39 +79,6 @@
             </div>
         </div>
 
-        <!-- 昨日の販売実績表示部分 -->
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 昨日の販売実績</h5>
-            </div>
-            <div class="card-body">
-                <h6 th:text="${#temporals.format(yesterday, 'yyyy年MM月dd日')}">2023年01月01日</h6>
-
-                <div th:if="${yesterdaySales.isEmpty()}" class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> 昨日の販売記録はありません
-                </div>
-
-                <div th:unless="${yesterdaySales.isEmpty()}">
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>ビール名</th>
-                                    <th>本数</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="entry : ${yesterdaySales}">
-                                    <td th:text="${entry.key}">ビール名</td>
-                                    <td th:text="${entry.value}">本数</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="card mb-5">
             <div class="card-header bg-primary text-white">
                 <h3 class="mb-0"><i class="fas fa-tasks"></i> 機能メニュー</h3>

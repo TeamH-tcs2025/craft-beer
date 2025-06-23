@@ -43,20 +43,7 @@ public class HomeController {
         }
 
         model.addAttribute("username", user.getUsername());
-        
-        // 昨日の販売実績データを取得
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        Map<String, Integer> yesterdaySales = salesService.getYesterdaySales();
-        
-        // データがない場合はダミーデータを使用（開発中のみ）
-        if (yesterdaySales.isEmpty()) {
-            yesterdaySales = salesService.getYesterdaySalesWithDummyData();
-        }
-        
-        // モデルに昨日の日付と販売実績を追加
-        model.addAttribute("yesterday", yesterday);
-        model.addAttribute("yesterdaySales", yesterdaySales);
-        
+               
         // 天気データの追加（WeatherServiceがあれば）
         try {
             model.addAttribute("todayWeather", weatherService.getTodayWeatherData());
@@ -82,19 +69,6 @@ public class HomeController {
         }
 
         model.addAttribute("username", user.getUsername());
-        
-        // 昨日の販売実績データを取得
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        Map<String, Integer> yesterdaySales = salesService.getYesterdaySales();
-        
-        // データがない場合はダミーデータを使用（開発中のみ）
-        if (yesterdaySales.isEmpty()) {
-            yesterdaySales = salesService.getYesterdaySalesWithDummyData();
-        }
-        
-        // モデルに昨日の日付と販売実績を追加
-        model.addAttribute("yesterday", yesterday);
-        model.addAttribute("yesterdaySales", yesterdaySales);
         
         // 天気データの追加（WeatherServiceがあれば）
         try {
