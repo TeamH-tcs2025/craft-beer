@@ -5,37 +5,7 @@
 <head th:replace="fragments/layout :: head('クラフトビール需要予測 [管理者]')">
     <meta charset="UTF-8">
     <title>クラフトビール需要予測</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .beer-card {
-            border-left: 5px solid;
-            margin-bottom: 10px;
-            transition: transform 0.2s;
-        }
-        .beer-card:hover {
-            transform: translateY(-5px);
-        }
-        .beer-pale-ale { border-left-color: #F9D342; }
-        .beer-lager { border-left-color: #FB9039; }
-        .beer-ipa { border-left-color: #D54062; }
-        .beer-white { border-left-color: #ECECEC; }
-        .beer-dark { border-left-color: #30475E; }
-        .beer-fruit { border-left-color: #F67280; }
-        .beer-total { border-left-color: #45B69C; background-color: #f8f9fa; }
-        .card-title { font-weight: bold; }
-        .forecast-date {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .order-day-badge {
-            font-size: 1rem;
-            vertical-align: middle;
-            margin-left: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -150,16 +120,6 @@
                     </div>
                 </div>
                 
-                <!-- 発注日の場合の操作ボタン -->
-                <div class="text-center mt-3" th:if="${isOrderDay}">
-                    <button class="btn btn-success btn-lg">
-                        <i class="fas fa-file-export"></i> 発注データ出力
-                    </button>
-                    <button class="btn btn-outline-primary btn-lg ml-2">
-                        <i class="fas fa-edit"></i> 発注数量調整
-                    </button>
-                </div>
-                
                 <!-- 注意書き -->
                 <div class="alert alert-warning mt-3">
                     <h5><i class="fas fa-exclamation-triangle"></i> 注意事項</h5>
@@ -226,7 +186,7 @@
                 </div>
                 
                 <!-- 予測対象日の表示 -->
-                <div class="mt-3">
+                <div class="forecast-dates mt-3">
                     <h6>予測対象日:</h6>
                     <span class="badge badge-info mr-2" th:each="date : ${forecastDates}" th:text="${date}">6/21(土)</span>
                     <span class="badge badge-light">(※日曜は定休日のため除外)</span>
@@ -250,49 +210,46 @@
     var dailyForecast = /*[[${dailyForecast}]]*/ {};
     
     // 明日の需要予測グラフ
-    var dailyCtx = document.getElementById('dailyForecastChart').getContext('2d');
-    var dailyChart = new Chart(dailyCtx, {
-        type: 'pie',
-        data: {
-            labels: ['ペールエール', 'ラガー', 'IPA', 'ホワイトビール', '黒ビール', 'フルーツビール'],
-            datasets: [{
-                data: [
-                    dailyForecast['ペールエール'] || 0,
-                    dailyForecast['ラガー'] || 0,
-                    dailyForecast['IPA'] || 0,
-                    dailyForecast['ホワイトビール'] || 0,
-                    dailyForecast['黒ビール'] || 0,
-                    dailyForecast['フルーツビール'] || 0
-                ],
-                backgroundColor: [
-                    '#F9D342', // ペールエール
-                    '#FB9039', // ラガー
-                    '#D54062', // IPA
-                    '#ECECEC', // ホワイトビール
-                    '#30475E', // 黒ビール
-                    '#F67280'  // フルーツビール
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'right',
-                },
-                title: {
-                    display: true,
-                    text: '明日の需要予測比率'
+    document.addEventListener('DOMContentLoaded', function() {
+        var dailyCtx = document.getElementById('dailyForecastChart').getContext('2d');
+        var dailyChart = new Chart(dailyCtx, {
+            type: 'pie',
+            data: {
+                labels: ['ペールエール', 'ラガー', 'IPA', 'ホワイトビール', '黒ビール', 'フルーツビール'],
+                datasets: [{
+                    data: [
+                        dailyForecast['ペールエール'] || 0,
+                        dailyForecast['ラガー'] || 0,
+                        dailyForecast['IPA'] || 0,
+                        dailyForecast['ホワイトビール'] || 0,
+                        dailyForecast['黒ビール'] || 0,
+                        dailyForecast['フルーツビール'] || 0
+                    ],
+                    backgroundColor: [
+                        '#F9D342', // ペールエール
+                        '#FB9039', // ラガー
+                        '#D54062', // IPA
+                        '#ECECEC', // ホワイトビール
+                        '#30475E', // 黒ビール
+                        '#F67280'  // フルーツビール
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: '明日の需要予測比率'
+                    }
                 }
             }
-        }
+        });
     });
     </script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

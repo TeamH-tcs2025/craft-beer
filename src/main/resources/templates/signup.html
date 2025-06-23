@@ -1,22 +1,88 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>新規ユーザー登録</title></head>
-<body>
-<h2>新規登録</h2>
 
-<form th:action="@{/signup}" method="post">
-    ユーザー名: <input type="text" name="username" required><br>
-    パスワード: <input type="password" name="password" required><br>
-    メールアドレス: <input type="email" name="email" required><br>
-<p>役割:
-    <label><input type="radio" name="role" value="true" checked> 管理者 </label>
-    <label><input type="radio" name="role" value="false" checked> 一般ユーザー </label> 
-</p>
-    <input type="submit" value="登録">
-</form>
+<head th:replace="fragments/layout :: head('新規ユーザー登録')">
+    <meta charset="UTF-8">
+    <title>新規ユーザー登録</title>
+</head>
 
-<div th:if="${error}" style="color: red;">
-    <p th:text="${error}"></p>
-</div>
+<body class="page-container">
+    <div class="login-container">
+        <div class="login-logo">
+            <i class="fas fa-beer"></i>
+            <h2>クラフトビール管理</h2>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center mb-0">新規ユーザー登録</h3>
+            </div>
+            <div class="card-body p-4">
+                <form th:action="@{/signup}" method="post">
+                    <div class="form-group">
+                        <label for="username">ユーザー名</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">パスワード</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">メールアドレス</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>役割</label>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="roleAdmin" name="role" value="true" class="custom-control-input" checked>
+                            <label class="custom-control-label" for="roleAdmin">管理者</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="roleUser" name="role" value="false" class="custom-control-input">
+                            <label class="custom-control-label" for="roleUser">一般ユーザー</label>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> 登録
+                        </button>
+                    </div>
+                </form>
+
+                <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}">
+                    エラーメッセージ
+                </div>
+            </div>
+            <div class="card-footer text-center bg-white">
+                <a th:href="@{/login}" class="text-primary">
+                    <i class="fas fa-arrow-left"></i> ログイン画面に戻る
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

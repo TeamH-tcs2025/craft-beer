@@ -33,9 +33,9 @@ public class SignupController {
             session.setAttribute("role", role);
 
             if ("false".equals(role)) {
-                return "redirect:/home";
+                return "redirect:/login";
             } else {
-                return "redirect:/home";
+                return "redirect:/login";
             }
         } else {
             model.addAttribute("error", "このユーザー名は既に使われています。");
