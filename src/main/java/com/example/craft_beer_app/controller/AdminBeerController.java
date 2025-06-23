@@ -25,12 +25,13 @@ public class AdminBeerController {
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("beer", new Beer());
-        return "adBeerform";
+        return "adBeer-form";
     }
  
     // 追加処理
     @PostMapping("/add")
     public String addBeer(@ModelAttribute Beer beer) {
+        beer.setIsActive(true); // 追加時に必ずtrueをセット
         beerService.saveBeer(beer);
         return "redirect:/admin/beers";
     }
@@ -40,7 +41,7 @@ public class AdminBeerController {
     public String showEditForm(@PathVariable Long id, Model model) {
         Beer beer = beerService.getBeerById(id).orElseThrow();
         model.addAttribute("beer", beer);
-        return "adBeerform";
+        return "adBeer-form";
     }
  
     // 編集処理
@@ -53,13 +54,10 @@ public class AdminBeerController {
         return "redirect:/admin/beers";
     }
  
-    // 論理削除
+    // 削除処理（DBから物理削除）
     @PostMapping("/delete/{id}")
     public String deleteBeer(@PathVariable Long id) {
-        Beer beer = beerService.getBeerById(id).orElseThrow();
-        beer.setIsActive(false);
-        beer.setUpdatedAt(java.time.LocalDateTime.now());
-        beerService.saveBeer(beer);
+        beerService.deleteBeerById(id);
         return "redirect:/admin/beers";
     }
 }
