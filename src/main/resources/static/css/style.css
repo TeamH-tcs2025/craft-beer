@@ -547,6 +547,26 @@ canvas {
   color: var(--primary-color);
 }
 
+/* 予測ページ - グラフサイズ調整 */
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 300px;
+  width: 300px; /* Adjust this value to make the chart smaller */
+}
+
+/* If you're using Chart.js directly */
+canvas#forecastPieChart {
+  max-width: 300px; /* Adjust this value */
+  max-height: 300px; /* Adjust this value */
+}
+
+/* If your chart is inside a specific div */
+#chart-wrapper {
+  width: 300px; /* Adjust this value */
+  margin: 0 auto;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .navbar-brand {

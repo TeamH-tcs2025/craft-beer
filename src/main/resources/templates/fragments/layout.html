@@ -63,32 +63,55 @@
     </div>
 </nav>
 
-<!-- フッターフラグメント -->
-<footer th:fragment="footer" class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 text-center text-md-left">
-                <span class="text-muted">© 2023 クラフトビールアプリケーション</span>
-            </div>
-            <div class="col-md-6 text-center text-md-right">
-                <!-- "Powered by スマレジ風デザイン" を削除 -->
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header and navigation here -->
+    
+    <!-- Main content wrapper with mt-auto class to push footer down -->
+    <main class="flex-shrink-0">
+        <div class="container mt-4 mb-4">
+            <!-- Content section -->
+            <div layout:fragment="content">
+                <!-- Page content goes here -->
             </div>
         </div>
-    </div>
-
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </main>
     
-    <!-- 現在の日付を表示 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const now = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
-            document.getElementById('current-date').textContent = now.toLocaleDateString('ja-JP', options);
-        });
-    </script>
-</footer>
+    <!-- フッターフラグメント -->
+    <footer th:fragment="footer" class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-beer"></i> H&C BAR</h5>
+                    <p class="mb-0">ホップアンドクラフト株式会社</p>
+                    <p class="mb-0">〒104-0054 東京都中央区勝どき２丁目８−１２</p>
+                    <p class="mb-0">クラフトビール専門店</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-decoration-none text-muted"><i class="fab fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#" class="text-decoration-none text-muted"><i class="fab fa-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href="#" class="text-decoration-none text-muted"><i class="fab fa-facebook"></i></a></li>
+                    </ul>
+                    <p class="mt-2 mb-0 text-muted">
+                        <small>&copy; 2025 Hop &amp; Craft.Inc All Rights Reserved.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
 
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- 現在の日付を表示 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+        document.getElementById('current-date').textContent = now.toLocaleDateString('ja-JP', options);
+    });
+</script>
 </html>
