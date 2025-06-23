@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>ビール編集</title>
-</head>
+<head th:replace="fragments/layout :: head('ビール編集')"></head>
 <body>
-    <h1 th:text="${beer.id == null ? '新規追加' : '編集'}"></h1>
-    <form th:action="@{${beer.id == null} ? '/admin/beers/add' : '/admin/beers/edit'}" th:object="${beer}" method="post">
-        <input type="hidden" th:field="*{id}">
-        <label>名前: <input type="text" th:field="*{name}" required></label><br>
-        <label>値段: <input type="number" th:field="*{price}" required></label><br>
-        <button type="submit">保存</button>
-    </form>
-    <a th:href="@{/admin/beers}">一覧へ戻る</a>
+    <div class="container mt-4">
+        <h1 th:text="${beer.id == null ? '新規追加' : '編集'}"></h1>
+        <form th:action="@{${beer.id == null} ? '/admin/beers/add' : '/admin/beers/edit'}" th:object="${beer}" method="post" class="mb-3">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-group">
+                <label>名前</label>
+                <input type="text" th:field="*{name}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>値段</label>
+                <input type="number" th:field="*{price}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a class="btn btn-secondary" th:href="@{/admin/beers}">一覧へ戻る</a>
+        </form>
+    </div>
 </body>
 </html>
