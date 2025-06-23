@@ -23,7 +23,7 @@ public class UserAchieveController {
 
     @GetMapping("/user/achieve")
     public String showAchieve(Model model) {
-        Map<String, Integer> salesresult = achieveService.getsalesresult();
+        Map<String, Integer> salesresult = achieveService.getSalesResult();
 
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         model.addAttribute("today", today);
@@ -33,6 +33,6 @@ public class UserAchieveController {
         Weather todayWeather = weatherService.getTodayWeatherData();
         model.addAttribute("todayWeather", todayWeather);
         
-        return "achieve";
+        return "userachieve"; 
     }
 }

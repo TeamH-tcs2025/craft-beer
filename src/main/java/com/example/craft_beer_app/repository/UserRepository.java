@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,11 +35,13 @@ public class UserRepository {
     }
     
     public User findByEmail(String email) {
+        // すでにprepared statementを使用しているのでOK
         String sql = "SELECT id, username, password_hash, email, role FROM users WHERE email = ?";
         try {
             return jdbc.queryForObject(sql, new UserRowMapper(), email);
-        } catch (Exception e) {
-            return null; // ユーザーが見つからない場合はnullを返す
+        } catch (EmptyResultDataAccessException e) {
+            // 具体的な例外をキャッチしてnullを返す
+            return null;
         }
     }
     

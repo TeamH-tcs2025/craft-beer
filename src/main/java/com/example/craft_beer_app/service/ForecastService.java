@@ -3,7 +3,6 @@ package com.example.craft_beer_app.service;
 import com.example.craft_beer_app.model.DailySales;
 import com.example.craft_beer_app.model.ForecastResponse;
 import com.example.craft_beer_app.model.WeatherData;
-import com.example.craft_beer_app.util.BeerTypeUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -183,7 +183,7 @@ public class ForecastService {
             if (responseBody.contains("{") && responseBody.contains("}")) {
                 try {
                     // 完全に一致するようにキーを設定してマッピングする
-                    Map<String, String> responseMap = mapper.readValue(responseBody, Map.class);
+                    Map<String, String> responseMap = mapper.readValue(responseBody, new TypeReference<Map<String, String>>() {});
                     
                     ForecastResponse forecastResponse = new ForecastResponse();
                     forecastResponse.setPaleAle(responseMap.get("ペールエール(本)"));
@@ -229,13 +229,14 @@ public class ForecastService {
      */
     private Map<String, Integer> getDemoRecommendation() {
         Map<String, Integer> demo = new HashMap<>();
-        demo.put("ペールエール", 12);
-        demo.put("ラガー", 9);
-        demo.put("IPA", 6);
-        demo.put("ホワイトビール", 4);
-        demo.put("黒ビール", 7);
-        demo.put("フルーツビール", 5);
-        demo.put("合計", 43);
+        // 10%減らした値に修正
+        demo.put("ペールエール", 11); // 12から11に変更
+        demo.put("ラガー", 8);       // 9から8に変更
+        demo.put("IPA", 5);          // 6から5に変更
+        demo.put("ホワイトビール", 4); // 4はそのまま
+        demo.put("黒ビール", 6);      // 7から6に変更
+        demo.put("フルーツビール", 5); // 5はそのまま
+        demo.put("合計", 39);        // 43から39に変更
         return demo;
     }
 
@@ -336,13 +337,13 @@ public class ForecastService {
                         extractQuantity(forecast.getFruitBeer()));
             }
             
-            // 安全在庫を少し足す (売り切れ防止のための10%増し)
-            paleAleTotal = (int) Math.ceil(paleAleTotal * 1.1);
-            lagerTotal = (int) Math.ceil(lagerTotal * 1.1);
-            ipaTotal = (int) Math.ceil(ipaTotal * 1.1);
-            whiteBeerTotal = (int) Math.ceil(whiteBeerTotal * 1.1);
-            darkBeerTotal = (int) Math.ceil(darkBeerTotal * 1.1);
-            fruitBeerTotal = (int) Math.ceil(fruitBeerTotal * 1.1);
+            // 小数点以下を切り上げる (元は安全在庫の10%増しがあったが除去)
+            paleAleTotal = (int) Math.ceil(paleAleTotal);
+            lagerTotal = (int) Math.ceil(lagerTotal);
+            ipaTotal = (int) Math.ceil(ipaTotal);
+            whiteBeerTotal = (int) Math.ceil(whiteBeerTotal);
+            darkBeerTotal = (int) Math.ceil(darkBeerTotal);
+            fruitBeerTotal = (int) Math.ceil(fruitBeerTotal);
             
             // 結果をマップに格納
             result.put("ペールエール", paleAleTotal);
