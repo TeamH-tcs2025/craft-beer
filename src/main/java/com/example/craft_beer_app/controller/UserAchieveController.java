@@ -33,6 +33,6 @@ public class UserAchieveController {
         Weather todayWeather = weatherService.getTodayWeatherData();
         model.addAttribute("todayWeather", todayWeather);
         
-        return "achieve";
+        return "userachieve";
     }
 }
