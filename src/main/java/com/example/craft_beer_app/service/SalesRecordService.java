@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import com.example.craft_beer_app.util.BeerTypeUtil;
 
 @Service
 public class SalesRecordService {
@@ -83,16 +82,11 @@ public class SalesRecordService {
     for (SalesRecord record : records) {
         LocalDate recordDate = record.getDate();
         
-        // ビール名からタイプを判定
-        String beerType = BeerTypeUtil.getBeerTypeFromName(record.getBeer().getName());
         Integer quantity = record.getQuantity();
         
         // 日付のマップがなければ作成
         salesByDateAndType.putIfAbsent(recordDate, new HashMap<>());
-        
-        // ビールタイプの販売数を加算
-        Map<String, Integer> typeSales = salesByDateAndType.get(recordDate);
-        typeSales.put(beerType, typeSales.getOrDefault(beerType, 0) + quantity);
+    
     }
     
     // 集計結果をDailySalesオブジェクトに変換

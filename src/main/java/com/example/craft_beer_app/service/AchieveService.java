@@ -16,17 +16,17 @@ public class AchieveService {
     @Autowired
     private SalesRecordService salesRecordService;
 
-    public Map<String, Integer> getsalesresult() {
+    public Map<String, Integer> getSalesResult() {
         LocalDate today = LocalDate.now();
         List<SalesRecord> todayRecords = salesRecordService.getSalesRecordsByDate(today);
 
-        Map<String, Integer> salesresult = new HashMap<>();
+        Map<String, Integer> salesResult = new HashMap<>();
         for (SalesRecord record : todayRecords) {
             String beerName = record.getBeer().getName();
             int quantity = record.getQuantity();
-            salesresult.put(beerName, salesresult.getOrDefault(beerName, 0) + quantity);
+            salesResult.put(beerName, salesResult.getOrDefault(beerName, 0) + quantity);
         }
 
-        return salesresult;
+        return salesResult;
     }
 }
