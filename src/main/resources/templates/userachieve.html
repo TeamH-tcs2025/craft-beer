@@ -1,76 +1,105 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- 一般ユーザー -->
-<head>
+
+<head th:replace="fragments/layout :: head('販売実績・天気データ')">
     <meta charset="UTF-8">
     <title>販売実績・天気データ</title>
 </head>
+
 <body>
-    <h1>販売実績・天気データ</h1>
-    <hr>
+    <nav th:replace="fragments/layout :: nav('sales')"></nav>
+    
+    <div class="container mt-4">
+        <h1 class="mb-4">
+            <i class="fas fa-chart-bar"></i> 販売実績・天気データ
+        </h1>
 
-    <h3>今日の日付</h3>
-    <p th:text="${today}">YYYY/MM/DD</p>
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-day"></i> 今日の日付</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead mb-0" th:text="${today}">YYYY/MM/DD</p>
+            </div>
+        </div>
 
-    <h3>今日の天気：</h3>
-    <div class="card-body">
-        <div class="row">
-            <!-- 天気情報 -->
-            <div class="col-md-4">
-                <h6 class="border-bottom pb-2 mb-3">天気情報</h6>
-                
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-cloud-sun"></i> 今日の気象条件</h5>
+            </div>
+            <div class="card-body">
                 <!-- 天気データがある場合 -->
                 <div th:if="${todayWeather != null}">
-                    <!-- 降水量に応じて天気アイコンを変更 -->
-                    <div class="h3 mb-3" th:if="${todayWeather.precipitation > 0}">🌧️</div>
-                    <div class="h3 mb-3" th:if="${todayWeather.precipitation == 0}">☀️</div>
-                    
-                    <table class="table table-sm">
-                        <tr>
-                            <th>最高気温</th>
-                            <td class="text-danger" th:text="${todayWeather.temperatureHigh + '°C'}">30°C</td>
-                        </tr>
-                        <tr>
-                            <th>最低気温</th>
-                            <td class="text-primary" th:text="${todayWeather.temperatureLow + '°C'}">20°C</td>
-                        </tr>
-                        <tr>
-                            <th>体感温度</th>
-                            <td th:text="${todayWeather.feelsLike + '°C'}">25°C</td>
-                        </tr>
-                        <tr>
-                            <th>降水量</th>
-                            <td th:text="${todayWeather.precipitation + ' mm'}">0 mm</td>
-                        </tr>
-                        <tr>
-                            <th>風速</th>
-                            <td th:text="${todayWeather.windSpeed + ' m/s'}">2 m/s</td>
-                        </tr>
-                        <tr>
-                            <th>湿度</th>
-                            <td th:text="${todayWeather.humidity + '%'}">60%</td>
-                        </tr>
-                    </table>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table">
+                                <tr>
+                                    <th>最高気温</th>
+                                    <td class="text-danger" th:text="${todayWeather.temperatureHigh + '°C'}">30°C</td>
+                                </tr>
+                                <tr>
+                                    <th>最低気温</th>
+                                    <td class="text-primary" th:text="${todayWeather.temperatureLow + '°C'}">20°C</td>
+                                </tr>
+                                <tr>
+                                    <th>体感温度</th>
+                                    <td th:text="${todayWeather.feelsLike + '°C'}">25°C</td>
+                                </tr>
+                                <tr>
+                                    <th>降水量</th>
+                                    <td th:text="${todayWeather.precipitation + ' mm'}">0 mm</td>
+                                </tr>
+                                <tr>
+                                    <th>風速</th>
+                                    <td th:text="${todayWeather.windSpeed + ' m/s'}">2 m/s</td>
+                                </tr>
+                                <tr>
+                                    <th>湿度</th>
+                                    <td th:text="${todayWeather.humidity + '%'}">60%</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- 天気データがない場合 -->
-                <div th:if="${todayWeather == null}" class="text-muted">
-                    <p>天気データを取得できませんでした。</p>
+                <div th:if="${todayWeather == null}" class="alert alert-warning">
+                    <p><i class="fas fa-exclamation-triangle mr-2"></i> 天気データを取得できませんでした。</p>
                 </div>
             </div>
         </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 販売実績</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ビールの種類</th>
+                                <th>販売本数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entry : ${salesresult}">
+                                <td th:text="${entry.key}">ビール名</td>
+                                <td th:text="${entry.value + '本'}">0本</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 mb-5 text-center">
+            <a th:href="@{/user/home}" class="btn btn-primary">
+                <i class="fas fa-home"></i> ホームへ戻る
+            </a>
+        </div>
     </div>
 
-    <h3>販売実績</h3>
-    <ul>
-        <li th:each="entry : ${salesresult}">
-            <span th:text="${entry.key}"></span>：<span th:text="${entry.value}"></span> 本
-        </li>
-    </ul>
-
-    <br>
-    <a th:href="@{/user/home}">
-        <button>ホームへ戻る</button>
-    </a>
+    <footer th:replace="fragments/layout :: footer"></footer>
 </body>
 </html>

@@ -11,30 +11,53 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- カスタムCSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- アイコン -->
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
 
 <!-- ナビゲーションバーフラグメント -->
-<nav th:fragment="nav(active)" class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav th:fragment="nav(active)" class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="/home">クラフトビール販売管理</a>
+        <a class="navbar-brand" href="/" th:href="@{/home}">
+            <i class="fas fa-beer mr-2"></i>クラフトビール管理
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto" sec:authorize="hasRole('ADMIN')">
                 <li class="nav-item" th:classappend="${active == 'home'} ? 'active' : ''">
-                    <a class="nav-link" href="/home">ホーム</a>
+                    <a class="nav-link" th:href="@{/admin/home}"><i class="fas fa-home"></i> ホーム</a>
                 </li>
                 <li class="nav-item" th:classappend="${active == 'sales'} ? 'active' : ''">
-                    <a class="nav-link" href="/sales-records">販売実績</a>
+                    <a class="nav-link" th:href="@{/admin/sales-records}"><i class="fas fa-chart-bar"></i> 販売実績</a>
+                </li>
+                <li class="nav-item" th:classappend="${active == 'forecast'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/admin/forecast}"><i class="fas fa-chart-line"></i> 需要予測</a>
                 </li>
             </ul>
+            <ul class="navbar-nav mr-auto" sec:authorize="hasRole('USER')">
+                <li class="nav-item" th:classappend="${active == 'home'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/user/home}"><i class="fas fa-home"></i> ホーム</a>
+                </li>
+                <li class="nav-item" th:classappend="${active == 'sales'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/user/sales-records}"><i class="fas fa-chart-bar"></i> 販売実績</a>
+                </li>
+                <li class="nav-item" th:classappend="${active == 'forecast'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/user/forecast}"><i class="fas fa-chart-line"></i> 需要予測</a>
+                </li>
+            </ul>
+            <div class="navbar-text mr-3 text-white">
+                <i class="far fa-calendar-alt"></i> <span id="current-date"></span>
+            </div>
             <form th:action="@{/logout}" method="post" class="form-inline">
-                <button class="btn btn-outline-light" type="submit">ログアウト</button>
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
             </form>
         </div>
     </div>
@@ -43,13 +66,29 @@
 <!-- フッターフラグメント -->
 <footer th:fragment="footer" class="footer">
     <div class="container">
-        <span class="text-muted">&copy; 2023 クラフトビールアプリケーション</span>
+        <div class="row">
+            <div class="col-md-6 text-center text-md-left">
+                <span class="text-muted">© 2023 クラフトビールアプリケーション</span>
+            </div>
+            <div class="col-md-6 text-center text-md-right">
+                <!-- "Powered by スマレジ風デザイン" を削除 -->
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- 現在の日付を表示 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('ja-JP', options);
+        });
+    </script>
 </footer>
 
 </html>
