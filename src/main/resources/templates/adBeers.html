@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ビール管理</title>
+</head>
+<body>
+    <h1>ビール一覧</h1>
+    <a th:href="@{/admin/beers/add}">新規追加</a>
+    <table>
+        <tr>
+            <th>名前</th>
+            <th>値段</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="beer : ${beers}">
+            <td th:text="${beer.name}"></td>
+            <td th:text="${beer.price}"></td>
+            <td>
+                <a th:href="@{'/admin/beers/edit/' + ${beer.id}}">編集</a>
+                <form th:action="@{'/admin/beers/delete/' + ${beer.id}}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

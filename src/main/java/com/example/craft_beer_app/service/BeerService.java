@@ -42,4 +42,8 @@ public class BeerService {
             beerRepository.save(beer);
         }
     }
+
+    public void deleteBeerById(Long id) {
+        beerRepository.deleteById(id);
+    }
 }

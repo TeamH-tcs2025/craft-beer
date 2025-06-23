@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ビール編集</title>
+</head>
+<body>
+    <h1 th:text="${beer.id == null ? '新規追加' : '編集'}"></h1>
+    <form th:action="@{${beer.id == null} ? '/admin/beers/add' : '/admin/beers/edit'}" th:object="${beer}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <label>名前: <input type="text" th:field="*{name}" required></label><br>
+        <label>値段: <input type="number" th:field="*{price}" required></label><br>
+        <button type="submit">保存</button>
+    </form>
+    <a th:href="@{/admin/beers}">一覧へ戻る</a>
+</body>
+</html>
